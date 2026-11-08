@@ -9,12 +9,12 @@
 **Yêu cầu hệ thống:** macOS 12.0 trở lên (hỗ trợ cả chip Apple Silicon `M1/M2/M3/M4` và Intel).
 
 ### Cách 1: Cài đặt bằng bộ cài `.dmg` (Khuyên dùng)
-1. Tải tệp **`JojoAgent-macos-universal-v1.1.1.dmg`** từ trang [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (hoặc tải trực tiếp tệp **`JojoAgent.dmg`** trong repository này).
+1. Tải tệp **`JojoAgent-macos-universal-v1.2.0.dmg`** từ trang [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (hoặc tải trực tiếp tệp **`JojoAgent.dmg`** trong repository này).
 2. Nhấp đúp mở tệp `.dmg`, sau đó kéo biểu tượng **`JojoAgent.app`** thả vào thư mục **`Applications`**.
 3. Mở **`JojoAgent`** từ **Applications** hoặc **Launchpad**. Nếu macOS hỏi xác nhận mở ứng dụng lần đầu, chọn **Open** (hoặc chạy lệnh `xattr -cr /Applications/JojoAgent.app` trong Terminal).
 
 ### Cách 2: Tải tệp `.zip` hoặc `.app` trực tiếp
-1. Tải **`JojoAgent-macos-universal-v1.1.1.zip`** từ trang [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) và giải nén (hoặc lấy trực tiếp thư mục **`JojoAgent.app`**).
+1. Tải **`JojoAgent-macos-universal-v1.2.0.zip`** từ trang [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) và giải nén (hoặc lấy trực tiếp thư mục **`JojoAgent.app`**).
 2. Kéo **`JojoAgent.app`** vào thư mục **`/Applications`** và mở ứng dụng.
 
 ---
@@ -23,6 +23,10 @@
 
 ### 0. Chat văn bản trên Menu Bar
 **Bấm trái** vào biểu tượng **◉** để mở khung chat với jojo (gõ câu hỏi, nhấn Enter). **Bấm phải** ◉ (hoặc nút **⋯**) mở menu 3 dòng: *Bắt đầu / Kết thúc cuộc gọi*, *Tài khoản…*, *Thoát jojo*.
+
+**Jojo có thể gọi công cụ** khi bạn nhờ trong chat (khung chat hiện *“Đang dùng công cụ: …”* và nhãn 🔧):
+- *Tự chạy (chỉ đọc):* chụp & phân tích màn hình, xem ngày giờ, đọc clipboard, xem ứng dụng đang dùng, xem thông tin máy.
+- *Luôn hỏi bạn trước (Cho phép / Từ chối):* mở trang web, mở ứng dụng, đọc tệp văn bản (chỉ trong Desktop / Documents / Downloads), tạo hoặc ghi đè tệp (chỉ trong `~/Documents/JojoAgent`). Hộp thoại hiện đúng địa chỉ / đường dẫn; nút mặc định là **Từ chối**.
 
 ### 1. Đăng nhập / Cấu hình lần đầu
 1. Khi mở ứng dụng, biểu tượng **◉** của **JojoAgent** sẽ xuất hiện trên thanh Menu Bar (góc trên bên phải màn hình) cùng quả cầu **Jojo** ở góc dưới màn hình.
@@ -58,7 +62,7 @@
 
 ---
 
-## 🔒 Bảo mật & hiệu năng (v1.1.1)
+## 🔒 Bảo mật & hiệu năng (v1.2.0)
 - Token / API Key được lưu trong **macOS Keychain**, không còn lưu dạng văn bản thường và không bao giờ được đưa vào trang web của ứng dụng. Đăng nhập bằng tài khoản được xử lý hoàn toàn bên trong ứng dụng.
 - Ứng dụng chỉ gọi tới máy chủ AitechAsia đã cấu hình (HTTPS); token và mật khẩu được che trong nhật ký nội bộ.
 - **Tài khoản… → Đăng xuất** xoá token khỏi Keychain.
