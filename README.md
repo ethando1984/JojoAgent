@@ -16,6 +16,14 @@
 
 <p align="center"><img src="docs/02-attach-image-camera.png" alt="Đính kèm ảnh và nút camera" width="420"></p>
 
+**Cuộc gọi giọng nói, chế độ thu nhỏ:** quả cầu **jojo** nhỏ gọn ở góc màn hình kèm phụ đề hội thoại; kéo để đổi vị trí, bấm **Mở rộng** để phóng to.
+
+<p align="center"><img src="docs/05-voice-call-mini.png" alt="Cuộc gọi giọng nói - chế độ thu nhỏ" width="470"></p>
+
+**Cuộc gọi giọng nói, chế độ toàn màn hình:** quả cầu sóng âm lớn phản ứng theo giọng nói theo thời gian thực (màu đổi theo trạng thái nghe / nghĩ / nói); bấm **Thu gọn** để quay lại.
+
+<p align="center"><img src="docs/06-voice-call-full.png" alt="Cuộc gọi giọng nói - chế độ toàn màn hình" width="420"></p>
+
 **Luôn hỏi trước khi làm việc có tác động:** thêm lịch, nhắc việc, mở ứng dụng, đọc / ghi tệp đều hiện hộp *Cho phép / Từ chối* với nội dung thật (nút mặc định là *Từ chối*).
 
 <p align="center"><img src="docs/03-confirm-dialog.png" alt="Hộp xác nhận thêm sự kiện lên Lịch" width="360"></p>
