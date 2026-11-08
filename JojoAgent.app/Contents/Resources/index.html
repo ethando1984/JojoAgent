@@ -34,14 +34,6 @@ header,footer,.tools{transition:opacity .22s}.mini header,.mini footer,.mini .to
   z-index:20;
   overflow:hidden;
 }
-#chat-panel.console-mode{
-  background:rgba(16,28,34,.94);
-  border:1px solid rgba(180,209,213,.45);
-  border-radius:14px;
-  box-shadow:0 8px 24px rgba(12,32,42,.22);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-}
 #chat-panel[hidden]{display:none!important}
 body:not(.mini) #chat-panel{
   right:auto;
@@ -65,7 +57,6 @@ body:not(.mini) #chat-panel{
   flex-shrink:0;
   user-select:none;
 }
-#chat-panel.console-mode #chat-toolbar{display:flex}
 #chat-live-status{
   display:flex;
   align-items:center;
@@ -112,8 +103,6 @@ body:not(.mini) #chat-panel{
 }
 #chat-subtitles[hidden]{display:none!important}
 #chat-subtitles::-webkit-scrollbar{display:none}
-#console-logs::-webkit-scrollbar{width:5px}
-#console-logs::-webkit-scrollbar-thumb{background:rgba(79,210,232,.35);border-radius:4px}
 .chat-empty{display:none}
 .chat-bubble{
   max-width:94%;
@@ -196,39 +185,6 @@ body:not(.mini) #chat-panel{
   z-index:25;
 }
 #scroll-latest-pill[hidden]{display:none!important}
-#caption-btn,#mini-console-btn{display:none}
-#console-logs{
-  flex:1;
-  min-height:0;
-  overflow-y:auto;
-  overflow-x:hidden;
-  background:#101c22;
-  color:#d6e8ee;
-  font:11px/1.42 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
-  padding:7px 8px;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-  pointer-events:auto;
-  overscroll-behavior:contain;
-  user-select:text;
-  -webkit-user-select:text;
-}
-#console-logs[hidden]{display:none!important}
-.console-row{
-  padding:2px 4px;
-  border-radius:4px;
-  border-left:2px solid #2b6f7e;
-  background:rgba(255,255,255,.03);
-  word-break:break-word;
-  white-space:pre-wrap;
-  flex-shrink:0;
-}
-.console-row.level-warn{border-left-color:#e0a82e;color:#ffe6a3}
-.console-row.level-error{border-left-color:#e55353;color:#ffb8b8;background:rgba(229,83,83,.1)}
-.console-time{color:#7aa0ad;margin-right:5px}
-.console-tag{font-weight:700;color:#4fd2e8;margin-right:5px}
-.console-row.level-error .console-tag{color:#ff7b7b}
 
 #auth-modal{position:fixed;inset:0;background:rgba(18,32,40,.45);display:none;align-items:center;justify-content:center;z-index:50}
 #auth-modal.open{display:flex}
@@ -247,13 +203,11 @@ body:not(.mini) #chat-panel{
     <div class="toolbar-actions">
       <button type="button" class="tool-btn" id="scroll-up" title="Cuộn lên trên (Scroll Up)">↑</button>
       <button type="button" class="tool-btn" id="scroll-down" title="Cuộn xuống cuối (Scroll Down)">↓</button>
-      <button type="button" class="tool-btn" id="toggle-console" title="Bật/tắt bảng Console logs">Console</button>
       <button type="button" class="tool-btn" id="clear-chat" title="Xóa lịch sử / Ẩn bảng">✕</button>
     </div>
   </div>
   <div id="chat-subtitles" role="log" aria-live="polite" aria-label="Toàn bộ cuộc hội thoại"></div>
   <button type="button" id="scroll-latest-pill" hidden>↓ Tin nhắn mới nhất</button>
-  <div id="console-logs" role="log" aria-label="Bảng Console Logs" hidden></div>
 </div>
 <div id="entity">
   <canvas></canvas>
@@ -261,10 +215,9 @@ body:not(.mini) #chat-panel{
   <div id="mini-bar">
     <button id="expand" class="mini-pill" title="Mở rộng / Thu gọn">Mở rộng</button>
     <button id="caption-btn" class="mini-pill" title="Chụp & phân tích màn hình (model auto)">📸</button>
-    <button id="mini-console-btn" class="mini-pill" title="Mở bảng Hội thoại & Console">&gt;_</button>
   </div>
 </div>
-<footer aria-live="polite"><div id="label">Sẵn sàng</div><div id="hint">Bấm quả cầu để bắt đầu cuộc gọi · Kéo để di chuyển</div></footer><div class="tools"><button hidden id="cancel">Kết thúc cuộc gọi</button><button id="open-console-btn">Hội thoại &amp; Console</button><button id="config-btn">Cấu hình Token</button></div>
+<footer aria-live="polite"><div id="label">Sẵn sàng</div><div id="hint">Bấm quả cầu để bắt đầu cuộc gọi · Kéo để di chuyển</div></footer><div class="tools"><button hidden id="cancel">Kết thúc cuộc gọi</button><button id="caption-btn-full" title="Chụp & phân tích màn hình (model auto)">📸 Chụp màn hình</button><button id="config-btn">Tài khoản</button></div>
 <div id="auth-modal" role="dialog" aria-modal="true" aria-label="Cấu hình jojo">
   <form class="auth-card" id="auth-form">
     <h3>Cấu hình jojo</h3>
@@ -384,7 +337,7 @@ function endpointUrl(path) {
 const clipText = (text, max = APPEND_MAX_CHARS) =>
   text && text.length > max ? `${text.slice(0, max - 1)}…` : (text || '');
 
-// ─── Minimalist Floating Chat & Console Renderer (Incremental DOM + Scroll) ─
+// ─── Minimalist Floating Chat Renderer (Incremental DOM + Scroll) ─
 const DEFAULT_GREETING_TEXT = 'jojo xin chào, hello, こんにちは, 안녕하세요 ...';
 function createDefaultGreetingTurn() {
   return { id: 'greeting-init', role: 'assistant', text: DEFAULT_GREETING_TEXT, partial: false };
@@ -394,11 +347,9 @@ let turns = [createDefaultGreetingTurn()];
 let callStatus = 'idle'; // 'idle' | 'connecting' | 'live'
 let statusBanner = null; // { text, isError }
 let statusClearTimer = null;
-let consoleOpen = false;
 let panelDismissed = false;
 let lastHostChatActive = false;
 let stickToBottom = true;
-let consoleStickToBottom = true;
 let scrollRafPending = false;
 
 const turnNodes = new Map(); // turnId -> { root, dotEl, roleSpan, textEl, lastText, lastPartial, lastScreen, updates }
@@ -431,42 +382,6 @@ function appendConsoleLog(level, tag, message) {
     consoleEntries.splice(0, consoleEntries.length - MAX_CONSOLE_LOGS);
   }
 
-  const logContainer = $('#console-logs');
-  if (logContainer && typeof document.createElement === 'function') {
-    const row = document.createElement('div');
-    row.className = `console-row level-${entry.level}`;
-    row.dataset = row.dataset || {};
-    row.dataset.logId = String(entry.id);
-
-    const timeSpan = document.createElement('span');
-    timeSpan.className = 'console-time';
-    timeSpan.textContent = entry.time;
-
-    const tagSpan = document.createElement('span');
-    tagSpan.className = 'console-tag';
-    tagSpan.textContent = `[${entry.tag}]`;
-
-    const msgSpan = document.createElement('span');
-    msgSpan.className = 'console-msg';
-    msgSpan.textContent = entry.message;
-
-    row.appendChild?.(timeSpan);
-    row.appendChild?.(tagSpan);
-    row.appendChild?.(msgSpan);
-    logContainer.appendChild?.(row);
-
-    while (logContainer.children && logContainer.children.length > MAX_CONSOLE_LOGS) {
-      logContainer.removeChild?.(logContainer.children[0]);
-    }
-    if (consoleStickToBottom) {
-      logContainer.scrollTop = logContainer.scrollHeight || 0;
-    }
-  }
-
-  const toggleBtn = $('#toggle-console');
-  if (toggleBtn) {
-    toggleBtn.textContent = consoleOpen ? `Hội thoại (${turns.length})` : `Console (${consoleEntries.length})`;
-  }
   return entry;
 }
 
@@ -485,11 +400,6 @@ function syncToolbarStatus() {
   const statusEl = $('#chat-live-status');
   const dotEl = $('#status-dot');
   const textEl = $('#status-text');
-  const toggleBtn = $('#toggle-console');
-  if (toggleBtn) {
-    toggleBtn.classList?.toggle?.('active', consoleOpen);
-    toggleBtn.textContent = consoleOpen ? `Hội thoại (${turns.length})` : `Console (${consoleEntries.length})`;
-  }
   if (!statusEl || !textEl) return;
 
   if (statusBanner && statusBanner.text) {
@@ -558,21 +468,17 @@ function scheduleAutoScroll(force = false) {
 function renderChatSubtitles() {
   const panel = $('#chat-panel');
   const container = $('#chat-subtitles');
-  const logContainer = $('#console-logs');
   const latestPill = $('#scroll-latest-pill');
   if (!container) return;
 
   const validTurns = turns.filter(t => t.text && t.text.trim());
   const shouldShowPanel =
     !panelDismissed &&
-    (callStatus !== 'idle' || validTurns.length > 0 || !!(statusBanner && statusBanner.text) || consoleOpen);
+    (callStatus !== 'idle' || validTurns.length > 0 || !!(statusBanner && statusBanner.text));
 
   if (panel) {
     panel.hidden = !shouldShowPanel;
-    panel.classList?.toggle?.('console-mode', consoleOpen);
   }
-  container.hidden = consoleOpen;
-  if (logContainer) logContainer.hidden = !consoleOpen;
   updateHostChatPanelState(shouldShowPanel);
   syncToolbarStatus();
 
@@ -723,7 +629,6 @@ function renderChatSubtitles() {
     if (!statusBubbleNode.attached || children[children.length - 1] !== statusBubbleNode.root) {
       if (statusBubbleNode.attached) {
         statusBubbleNode.root.remove?.();
-        container.removeChild?.(statusBubbleNode.root);
       }
       container.appendChild?.(statusBubbleNode.root);
       statusBubbleNode.attached = true;
@@ -731,13 +636,12 @@ function renderChatSubtitles() {
     }
   } else if (statusBubbleNode && statusBubbleNode.attached) {
     statusBubbleNode.root.remove?.();
-    container.removeChild?.(statusBubbleNode.root);
     statusBubbleNode.attached = false;
     didMutateText = true;
   }
 
   if (latestPill) {
-    latestPill.hidden = consoleOpen || stickToBottom || validTurns.length === 0;
+    latestPill.hidden = stickToBottom || validTurns.length === 0;
   }
   if (didMutateText) {
     scheduleAutoScroll(true);
@@ -745,7 +649,7 @@ function renderChatSubtitles() {
 }
 
 function scrollActiveView(direction) {
-  const target = consoleOpen ? $('#console-logs') : $('#chat-subtitles');
+  const target = $('#chat-subtitles');
   if (!target) return;
   const pageStep = Math.max(120, Math.round((target.clientHeight || 220) * 0.72));
   if (direction === 'top') {
@@ -765,46 +669,17 @@ function scrollActiveView(direction) {
   const dist = (target.scrollHeight || 0) - (target.scrollTop || 0) - (target.clientHeight || 0);
   const atBottom = dist <= 36 || direction === 'bottom';
   if (atBottom) manualScrollHoldUntil = 0;
-  if (consoleOpen) {
-    consoleStickToBottom = direction === 'up' || direction === 'top' ? false : atBottom;
-  } else {
-    stickToBottom = direction === 'up' || direction === 'top' ? false : atBottom;
-    const latestPill = $('#scroll-latest-pill');
-    if (latestPill) latestPill.hidden = stickToBottom || turns.length === 0;
-  }
+  stickToBottom = direction === 'up' || direction === 'top' ? false : atBottom;
+  const latestPill = $('#scroll-latest-pill');
+  if (latestPill) latestPill.hidden = stickToBottom || turns.length === 0;
 }
 
 window.aiHubScrollConversation = function(direction = 'bottom') {
   scrollActiveView(direction);
   return {
     stickToBottom,
-    consoleStickToBottom,
-    scrollTop: (consoleOpen ? $('#console-logs') : $('#chat-subtitles'))?.scrollTop ?? 0,
+    scrollTop: $('#chat-subtitles')?.scrollTop ?? 0,
   };
-};
-
-window.aiHubToggleConsole = function(forceOpen) {
-  panelDismissed = false;
-  if (typeof forceOpen === 'boolean') {
-    consoleOpen = forceOpen;
-  } else {
-    const panel = $('#chat-panel');
-    if (panel && panel.hidden) {
-      consoleOpen = true;
-    } else {
-      consoleOpen = !consoleOpen;
-    }
-  }
-  renderChatSubtitles();
-  if (consoleOpen) {
-    const logContainer = $('#console-logs');
-    if (logContainer && consoleStickToBottom) {
-      logContainer.scrollTop = logContainer.scrollHeight || 0;
-    }
-  } else if (stickToBottom) {
-    scheduleAutoScroll();
-  }
-  return consoleOpen;
 };
 
 window.aiHubGetConsoleLogs = () => consoleEntries.slice();
@@ -1181,7 +1056,6 @@ async function analyzeScreenForQuestion(question, turnId = null, options = {}) {
   if (turnId) analyzedTurnIds.add(turnId);
   analyzingScreen = true;
   panelDismissed = false;
-  consoleOpen = false;
   manualScrollHoldUntil = 0;
   stickToBottom = true;
   const startedAt = performance.now();
@@ -2027,7 +1901,7 @@ if (orbEl) {
   orbEl.onpointercancel = finishDrag;
 }
 
-// ─── Conversation & Console Panel Controls ──────────────────────────────────
+// ─── Conversation Panel Controls ──────────────────────────────────
 const chatSubtitlesEl = $('#chat-subtitles');
 if (chatSubtitlesEl) {
   chatSubtitlesEl.onwheel = e => {
@@ -2035,7 +1909,7 @@ if (chatSubtitlesEl) {
       manualScrollHoldUntil = performance.now() + 6000;
       stickToBottom = false;
       const latestPill = $('#scroll-latest-pill');
-      if (latestPill) latestPill.hidden = consoleOpen || turns.length === 0;
+      if (latestPill) latestPill.hidden = turns.length === 0;
     } else if (e && e.deltaY > 2) {
       const dist = (chatSubtitlesEl.scrollHeight || 0) - (chatSubtitlesEl.scrollTop || 0) - (chatSubtitlesEl.clientHeight || 0);
       if (dist <= 48) {
@@ -2055,14 +1929,7 @@ if (chatSubtitlesEl) {
       stickToBottom = false;
     }
     const latestPill = $('#scroll-latest-pill');
-    if (latestPill) latestPill.hidden = consoleOpen || stickToBottom || turns.length === 0;
-  };
-}
-const consoleLogsEl = $('#console-logs');
-if (consoleLogsEl) {
-  consoleLogsEl.onscroll = () => {
-    const dist = (consoleLogsEl.scrollHeight || 0) - (consoleLogsEl.scrollTop || 0) - (consoleLogsEl.clientHeight || 0);
-    consoleStickToBottom = dist <= 36;
+    if (latestPill) latestPill.hidden = stickToBottom || turns.length === 0;
   };
 }
 if ($('#scroll-up')) {
@@ -2074,40 +1941,11 @@ if ($('#scroll-down')) {
 if ($('#scroll-latest-pill')) {
   $('#scroll-latest-pill').onclick = () => scrollActiveView('bottom');
 }
-if ($('#toggle-console')) {
-  $('#toggle-console').onclick = () => { window.aiHubToggleConsole(); };
-}
-if ($('#mini-console-btn')) {
-  $('#mini-console-btn').onclick = () => {
-    const panel = $('#chat-panel');
-    if (panel && !panel.hidden && !consoleOpen) {
-      window.aiHubToggleConsole(true);
-    } else if (panel && !panel.hidden && consoleOpen) {
-      window.aiHubToggleConsole(false);
-    } else {
-      panelDismissed = false;
-      consoleOpen = turns.length === 0;
-      renderChatSubtitles();
-    }
-  };
-}
-if ($('#open-console-btn')) {
-  $('#open-console-btn').onclick = () => {
-    panelDismissed = false;
-    window.aiHubToggleConsole();
-  };
-}
 if ($('#clear-chat')) {
   $('#clear-chat').onclick = () => {
-    if (consoleOpen) {
-      consoleOpen = false;
-      renderChatSubtitles();
-      return;
-    }
     statusBanner = null;
     if (callStatus === 'idle') {
       turns = [createDefaultGreetingTurn()];
-      consoleOpen = false;
       panelDismissed = true;
     }
     renderChatSubtitles();
@@ -2201,8 +2039,8 @@ $('#orb').onclick = () => {
   run('press');
 };
 $('#collapse').onclick = $('#expand').onclick = () => run('toggle');
-if ($('#caption-btn')) {
-  $('#caption-btn').onclick = () => { void window.aiHubCaptionScreen(); };
+for (const id of ['#caption-btn', '#caption-btn-full']) {
+  if ($(id)) $(id).onclick = () => { void window.aiHubCaptionScreen(); };
 }
 $('#cancel').onclick = () => run('cancel');
 window.addEventListener('keydown', e => {
@@ -2233,9 +2071,7 @@ window.aiHubGetState = () => ({
   voiceCallLogId: callLog.id,
   turns,
   customOffsets,
-  consoleOpen,
   stickToBottom,
-  consoleStickToBottom,
   totalNodeCreations,
   totalIncrementalUpdates,
   consoleCount: consoleEntries.length,
