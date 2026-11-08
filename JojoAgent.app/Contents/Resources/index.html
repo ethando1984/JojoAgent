@@ -486,8 +486,7 @@ function renderChatSubtitles() {
   const validIds = new Set(validTurns.map(t => t.id));
   for (const [id, entry] of turnNodes.entries()) {
     if (!validIds.has(id)) {
-      entry.root?.remove?.();
-      container.removeChild?.(entry.root);
+      entry.root?.remove?.();   // remove() already detaches it; a second removeChild() would throw
       turnNodes.delete(id);
     }
   }
