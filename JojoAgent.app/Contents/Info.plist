@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>JojoAgent</string>
+	<key>CFBundleExecutable</key>
+	<string>JojoAgent</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Jojo — Your Personal AI Agent from AitechAsia</string>
+	<key>CFBundleIconFile</key>
+	<string>Orb.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>asia.aitech.jojo.agent</string>
+	<key>CFBundleName</key>
+	<string>JojoAgent</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.3.0</string>
+	<key>CFBundleVersion</key>
+	<string>6</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>12.0</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>jojo đọc và thêm sự kiện trên Lịch khi bạn nhờ trong khung chat; mỗi thao tác đều hỏi bạn trước.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>jojo đọc và thêm sự kiện trên Lịch khi bạn nhờ trong khung chat; mỗi thao tác đều hỏi bạn trước.</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>jojo sử dụng microphone để trò chuyện trực tiếp với trợ lý AI qua WebRTC.</string>
+	<key>NSRemindersFullAccessUsageDescription</key>
+	<string>jojo đọc và thêm nhắc việc khi bạn nhờ trong khung chat; mỗi thao tác đều hỏi bạn trước.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>jojo đọc và thêm nhắc việc khi bạn nhờ trong khung chat; mỗi thao tác đều hỏi bạn trước.</string>
+	<key>NSScreenCaptureUsageDescription</key>
+	<string>jojo chụp màn hình khi bạn yêu cầu phân tích nội dung hiển thị trên màn hình.</string>
+</dict>
+</plist>
