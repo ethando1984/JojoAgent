@@ -9,12 +9,12 @@
 **Yêu cầu hệ thống:** macOS 12.0 trở lên (hỗ trợ cả chip Apple Silicon `M1/M2/M3/M4` và Intel).
 
 ### Cách 1: Cài đặt bằng bộ cài `.dmg` (Khuyên dùng)
-1. Tải tệp **`JojoAgent-macos-universal-v1.0.0.dmg`** từ trang [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (hoặc tải trực tiếp tệp **`JojoAgent.dmg`** trong repository này).
+1. Tải tệp **`JojoAgent-macos-universal-v1.1.0.dmg`** từ trang [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (hoặc tải trực tiếp tệp **`JojoAgent.dmg`** trong repository này).
 2. Nhấp đúp mở tệp `.dmg`, sau đó kéo biểu tượng **`JojoAgent.app`** thả vào thư mục **`Applications`**.
 3. Mở **`JojoAgent`** từ **Applications** hoặc **Launchpad**. Nếu macOS hỏi xác nhận mở ứng dụng lần đầu, chọn **Open** (hoặc chạy lệnh `xattr -cr /Applications/JojoAgent.app` trong Terminal).
 
 ### Cách 2: Tải tệp `.zip` hoặc `.app` trực tiếp
-1. Tải **`JojoAgent-macos-universal-v1.0.0.zip`** từ trang [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) và giải nén (hoặc lấy trực tiếp thư mục **`JojoAgent.app`**).
+1. Tải **`JojoAgent-macos-universal-v1.1.0.zip`** từ trang [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) và giải nén (hoặc lấy trực tiếp thư mục **`JojoAgent.app`**).
 2. Kéo **`JojoAgent.app`** vào thư mục **`/Applications`** và mở ứng dụng.
 
 ---
@@ -42,7 +42,7 @@
   - *"Trên màn hình đang hiển thị gì vậy?"*
   - *"Giải thích nội dung trên màn hình giúp tôi"*
 - **Bằng nút bấm / phím tắt:** Nhấn biểu tượng **📸** cạnh quả cầu hoặc nhấn phím tắt **`⌘S`**.
-- *Lưu ý:* Lần đầu sử dụng tính năng chụp màn hình, hãy cấp quyền **Screen Recording** cho **JojoAgent** trong **System Settings → Privacy & Security → Screen Recording**.
+- *Lưu ý:* Lần đầu bấm **`⌘S`**, macOS sẽ hỏi quyền **Screen Recording**; JojoAgent tự mở **System Settings → Privacy & Security → Screen & System Audio Recording** (cũng có trong menu **◉ → Cấp quyền Ghi màn hình…**). Bật **JojoAgent** rồi **thoát và mở lại ứng dụng** để quyền có hiệu lực. Nếu đã bật mà vẫn không chụp được, chạy `tccutil reset ScreenCapture asia.aitech.jojo.agent` rồi cấp lại.
 
 ---
 
@@ -56,3 +56,11 @@
 | **`⌘L`** | Bật / Tắt bảng Console & Hội thoại |
 | **`⌘,`** | Mở cấu hình đăng nhập / Token |
 | **`⌘Q`** | Thoát ứng dụng JojoAgent |
+
+---
+
+## 🔒 Bảo mật & hiệu năng (v1.1.0)
+- Token / API Key được lưu trong **macOS Keychain**, không còn lưu dạng văn bản thường và không bao giờ được đưa vào trang web của ứng dụng. Đăng nhập bằng tài khoản được xử lý hoàn toàn bên trong ứng dụng.
+- Ứng dụng chỉ gọi tới máy chủ AitechAsia đã cấu hình (HTTPS); token và mật khẩu được che trong nhật ký Console.
+- Menu **◉ → Cấu hình Token → Đăng xuất (xoá token)** xoá token khỏi Keychain.
+- Chụp màn hình dùng ScreenCaptureKit (macOS 14+), ứng dụng nhẹ hơn và tiêu tốn ít CPU hơn khi rảnh.
