@@ -4,8 +4,8 @@
 
 | Platform | Status | Download |
 | :--- | :--- | :--- |
-| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v1.4.1` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
-| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v1.4.1-windows-preview) |
+| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v1.4.2` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
+| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v1.4.2-windows-preview) |
 
 ---
 
@@ -33,9 +33,7 @@
 
 <p align="center"><img src="docs/03-confirm-dialog.png" alt="Confirmation dialog for adding a calendar event" width="360"></p>
 
-**Sign-in:** the password is sent once, and the token is kept in the macOS Keychain.
-
-<p align="center"><img src="docs/04-account-window.png" alt="Sign-in window" width="420"></p>
+**Sign-in and invites:** the password is sent once, and the token is kept in the macOS Keychain (on Windows, encrypted with DPAPI). No account yet? The sign-in window has a **"Chưa có tài khoản? Xin lời mời →"** link to the invite page on the Hub: enter your email, and an administrator reviews the request, creates your account and sends you the sign-in details.
 
 ---
 
@@ -44,12 +42,12 @@
 **Requirements:** macOS 12.0 or later (Apple Silicon `M1/M2/M3/M4` and Intel).
 
 ### Option 1: the `.dmg` installer (recommended)
-1. Download **`JojoAgent-macos-universal-v1.4.1.dmg`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (or take **`JojoAgent.dmg`** straight from this repository).
+1. Download **`JojoAgent-macos-universal-v1.4.2.dmg`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (or take **`JojoAgent.dmg`** straight from this repository).
 2. Double-click the `.dmg`, then drag **`JojoAgent.app`** onto the **`Applications`** folder.
 3. Open **`JojoAgent`** from **Applications** or **Launchpad**. If macOS asks you to confirm the first launch, choose **Open** (or run `xattr -cr /Applications/JojoAgent.app` in Terminal).
 
 ### Option 2: the `.zip` or the `.app` directly
-1. Download **`JojoAgent-macos-universal-v1.4.1.zip`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) and unzip it (or take the **`JojoAgent.app`** folder from this repository).
+1. Download **`JojoAgent-macos-universal-v1.4.2.zip`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) and unzip it (or take the **`JojoAgent.app`** folder from this repository).
 2. Drag **`JojoAgent.app`** into **`/Applications`** and open it.
 
 ---
@@ -61,7 +59,7 @@
 **Requirements:** Windows 10 (version 2004 or later) or Windows 11, 64-bit (x64). A microphone for voice calls.
 
 ### Option 1: the installer (recommended)
-1. Download **`JojoAgent-windows-x64-v1.4.1-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v1.4.1-windows-preview).
+1. Download **`JojoAgent-windows-x64-v1.4.2-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v1.4.2-windows-preview).
 2. Run it. Because the preview is not code-signed, Windows SmartScreen shows a warning: choose **More info → Run anyway**.
 3. Follow the installer. It installs for your Windows account only (no administrator prompt), adds a Start menu shortcut, and installs Microsoft Edge WebView2 Runtime if your PC does not have it.
 4. JojoAgent starts with an icon in the system tray (near the clock) and the **jojo** orb at the bottom-right of the screen.
@@ -69,7 +67,7 @@
 To remove it: **Settings → Apps → Installed apps → JojoAgent → Uninstall**.
 
 ### Option 2: portable `.zip`
-Download **`JojoAgent-windows-x64-v1.4.1-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
+Download **`JojoAgent-windows-x64-v1.4.2-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
 
 ### What is different on Windows
 - **Tray icon instead of the menu bar:** left-click the tray icon to open the chat, right-click it for the menu. The global shortcut is **`Ctrl+Alt+J`**.
@@ -96,12 +94,14 @@ The steps below describe the macOS app. On Windows the same features are reached
 **Jojo can call tools** when you ask (the chat shows *“Đang dùng công cụ: …”* (Using tool: …) and a 🔧 label):
 - *Runs by itself (read-only):* capture and analyse the screen, get the date and time, read the clipboard, see which app you were using, get system information.
 - *Always asks you first (Allow / Deny):* open a web page, open an app, read a text file (only in Desktop / Documents / Downloads), create or overwrite a file (only in `~/Documents/JojoAgent`), add a calendar event, add a reminder, list the next 7 days of your calendar, list unfinished reminders.
+- *Mouse and keyboard control (one Allow opens a 5-minute session):* `click_on_screen`, `type_text`, `press_key`, `scroll_screen`. jojo looks at a fresh screenshot to find what to click, never types into password fields, and is limited to 30 actions per minute. **Press `Esc` at any time to stop.** On macOS this needs JojoAgent enabled under **System Settings › Privacy & Security › Accessibility**; on Windows it cannot act on windows that run as administrator.
 - **During a voice call** jojo can also use the calendar, reminders, open apps / web pages and get the date and time, through the same Allow / Deny dialog (you approve with a click). With the gpt-live model this needs an up-to-date gateway server.
 
 ### 1. Sign in / first-time setup
 1. When the app opens, the **JojoAgent** **◉** icon appears in the menu bar (top right of the screen) and the **jojo** orb at the bottom of the screen.
 2. **Right-click** the **◉** icon (or press **`⌘,`**) and choose **Tài khoản…** (Account…).
 3. Enter your **AitechAsia** **username and password** (or a **token / API key**), then confirm.
+4. No account yet? Click **Chưa có tài khoản? Xin lời mời →** in the same window. It opens the Hub's invite page; enter your email and wait for an administrator to approve it. You then receive your username, password and API token (by email when the Hub has email set up).
 
 ### 2. Talk by voice
 - **Start / end a call:** click the **jojo** orb on the screen, or press **`⌘R`**.
@@ -133,7 +133,7 @@ The steps below describe the macOS app. On Windows the same features are reached
 
 ---
 
-## 🔒 Security and performance (v1.4.1)
+## 🔒 Security and performance (v1.4.2)
 - The token / API key is stored in the **macOS Keychain** (on Windows: encrypted with DPAPI), never as plain text, and is never handed to the app's web page. Signing in with an account is handled entirely inside the app.
 - The app only calls the configured AitechAsia server (HTTPS); tokens and passwords are masked in the internal log.
 - **Account… → Sign out** removes the token from the Keychain.
