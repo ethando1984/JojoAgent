@@ -4,13 +4,19 @@
 
 | Platform | Status | Download |
 | :--- | :--- | :--- |
-| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v2.1.0` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
-| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v2.1.0-windows-preview) |
+| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v2.2.0` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
+| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v2.2.0-windows-preview) |
 
-## ✨ What's new in v2.1.0
-- **jojo operates your apps through their accessibility tree.** New tools `desktop_snapshot`, `desktop_find`, `desktop_action` and `desktop_list_apps`, in the text chat and in voice calls, on macOS and Windows. jojo reads an app's interface as a list of controls, each with a reference, and clicks, types, picks options, ticks boxes or scrolls on that exact control. That is more precise than finding a spot on a screenshot, and most actions do not move your mouse. It uses the bundled [agent-desktop](https://github.com/ethando1984/agent-desktop) (Apache-2.0).
-- Same rules as mouse and keyboard control: one **Allow** opens a 5-minute session, **`Esc`** stops it at once, at most 30 actions a minute. jojo never reads or clicks its own windows or the system's sign-in and password prompts, and never types into a password field.
-- Since v2.0.0: answers from your **Knowledge Base** and from the **web** (`search_knowledge_base`, `web_search`, `browse_url`).
+## ✨ What's new in v2.2.0
+- **Control this computer from the Hub chat (optional, off by default).** In the Hub's Playground (MCP mode) you can pick this computer and ask for something ("check my email", "open Facebook and look up …"): jojo opens the app or page, reads it through its accessibility tree, acts, checks the result and keeps going until the goal is done. Switch it on in the menu: **◉ › Điều khiển từ Hub** (Windows: tray icon). The app asks for your consent **once, when you switch it on**; after that, commands from the Hub run **without an Allow dialog**, because nobody may be at the computer to click.
+- **You can always see it, and stop it.** While the Hub is operating your computer, ◉ turns into 🔴 (Windows: the tray tooltip says so and one balloon tip appears), until five minutes after the last command. **Press `Esc` to stop at once; that also switches the feature off.** You can also press **Ngắt máy này** on the Hub's *My computers* page to cut a computer off from afar.
+- **Each computer has its own key.** When you switch the feature on, the app asks once for a key of its own (kept in the macOS Keychain; on Windows, encrypted with DPAPI) and uses only that key to receive commands. Your sign-in can then no longer pose as the computer, and you can revoke the key on the Hub. Everything the Hub sends is logged (which tool, a short summary, the result, the address it came from; **text typed into the computer is never stored**, only its length) and you can read it on the *My computers* page.
+- **Screen captures also read the window's text** through the accessibility tree, so small text, numbers, error codes and code are read exactly instead of guessed from the picture.
+- **Esc is reliable:** it works for every command from the Hub (including opening an app or a page), and stops having any effect once the session is over.
+
+> **Anyone holding your Hub sign-in can send commands to a computer while the feature is on.** Keep it off when you do not use it, check the log on the *My computers* page, and press **Ngắt máy này** or `Esc` if you see something you did not do. The feature needs the current jojo server; with an older one the app falls back to its sign-in, as before.
+
+Earlier: **v2.1.0** added operating apps through their accessibility tree (`desktop_snapshot`, `desktop_find`, `desktop_action`, `desktop_list_apps`, built on the bundled [agent-desktop](https://github.com/ethando1984/agent-desktop), Apache-2.0); **v2.0.0** added answers from your Knowledge Base and the web.
 
 ---
 
@@ -47,12 +53,12 @@
 **Requirements:** macOS 12.0 or later (Apple Silicon `M1/M2/M3/M4` and Intel).
 
 ### Option 1: the `.dmg` installer (recommended)
-1. Download **`JojoAgent-macos-universal-v2.1.0.dmg`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (or take **`JojoAgent.dmg`** straight from this repository).
+1. Download **`JojoAgent-macos-universal-v2.2.0.dmg`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (or take **`JojoAgent.dmg`** straight from this repository).
 2. Double-click the `.dmg`, then drag **`JojoAgent.app`** onto the **`Applications`** folder.
 3. Open **`JojoAgent`** from **Applications** or **Launchpad**. If macOS asks you to confirm the first launch, choose **Open** (or run `xattr -cr /Applications/JojoAgent.app` in Terminal).
 
 ### Option 2: the `.zip` or the `.app` directly
-1. Download **`JojoAgent-macos-universal-v2.1.0.zip`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) and unzip it (or take the **`JojoAgent.app`** folder from this repository).
+1. Download **`JojoAgent-macos-universal-v2.2.0.zip`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) and unzip it (or take the **`JojoAgent.app`** folder from this repository).
 2. Drag **`JojoAgent.app`** into **`/Applications`** and open it.
 
 ---
@@ -64,7 +70,7 @@
 **Requirements:** Windows 10 (version 2004 or later) or Windows 11, 64-bit (x64). A microphone for voice calls.
 
 ### Option 1: the installer (recommended)
-1. Download **`JojoAgent-windows-x64-v2.1.0-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v2.1.0-windows-preview).
+1. Download **`JojoAgent-windows-x64-v2.2.0-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v2.2.0-windows-preview).
 2. Run it. Because the preview is not code-signed, Windows SmartScreen shows a warning: choose **More info → Run anyway**.
 3. Follow the installer. It installs for your Windows account only (no administrator prompt), adds a Start menu shortcut, and installs Microsoft Edge WebView2 Runtime if your PC does not have it.
 4. JojoAgent starts with an icon in the system tray (near the clock) and the **jojo** orb at the bottom-right of the screen.
@@ -72,7 +78,7 @@
 To remove it: **Settings → Apps → Installed apps → JojoAgent → Uninstall**.
 
 ### Option 2: portable `.zip`
-Download **`JojoAgent-windows-x64-v2.1.0-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
+Download **`JojoAgent-windows-x64-v2.2.0-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
 
 ### What is different on Windows
 - **Tray icon instead of the menu bar:** left-click the tray icon to open the chat, right-click it for the menu. The global shortcut is **`Ctrl+Alt+J`**.
@@ -126,6 +132,13 @@ The steps below describe the macOS app. On Windows the same features are reached
 - **By button:** click the **📸** icon next to the orb (or the **📸 Chụp màn hình** (Capture screen) button in full mode).
 - *Note:* the first capture makes macOS ask for the **Screen Recording** permission; JojoAgent opens **System Settings → Privacy & Security → Screen & System Audio Recording** for you. Turn on **JojoAgent**, then **quit and reopen the app** for the permission to take effect. If it is on and capture still fails, run `tccutil reset ScreenCapture asia.aitech.jojo.agent` and grant it again.
 
+### 5. Let the Hub operate this computer (optional)
+1. Sign in (step 1), then right-click **◉** (Windows: the tray icon) and choose **Điều khiển từ Hub**. Read the confirmation and agree: it is the one consent for everything the Hub sends later. It is off by default and the choice is remembered.
+2. On the Hub (`https://hub.aitech.asia/playground/`) choose **MCP** mode, then pick this computer in **Máy tính:** (only your own computers that have the feature on are listed).
+3. Ask for what you want. jojo keeps going until it is done, in at most 40 tool steps per message. The model is instructed to stop and ask before sending, posting, deleting, buying or paying, but nothing on your computer enforces that, so word your requests carefully. The app itself never types into password fields, never touches its own windows or the system's sign-in prompts, and does at most 30 actions a minute.
+4. While it works, ◉ shows 🔴. **Press `Esc`** to stop and switch the feature off; switch it back on in the menu when you want it again.
+5. The Hub's **My computers** page (Tools menu) lists your computers, every command with its result, time and address (grouped by request), and has **Ngắt máy này** (cut a computer off) and **Thu hồi khoá** (revoke its key).
+
 ---
 
 ## ⌨️ Keyboard shortcuts
@@ -143,4 +156,5 @@ The steps below describe the macOS app. On Windows the same features are reached
 - The token / API key is stored in the **macOS Keychain** (on Windows: encrypted with DPAPI), never as plain text, and is never handed to the app's web page. Signing in with an account is handled entirely inside the app.
 - The app only calls the configured AitechAsia server (HTTPS); tokens and passwords are masked in the internal log.
 - **Account… → Sign out** removes the token from the Keychain.
+- **Control from the Hub** is off until you switch it on, has its own key per computer (Keychain / DPAPI), is stopped by `Esc` and by **Ngắt máy này** on the Hub, and every command is logged without the text typed into the computer.
 - Screen capture uses ScreenCaptureKit (macOS 14+); the app is lighter and uses less CPU when idle.
