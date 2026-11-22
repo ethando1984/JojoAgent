@@ -4,8 +4,13 @@
 
 | Platform | Status | Download |
 | :--- | :--- | :--- |
-| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v1.4.2` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
-| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v1.4.2-windows-preview) |
+| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v2.1.0` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
+| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v2.1.0-windows-preview) |
+
+## ✨ What's new in v2.1.0
+- **jojo operates your apps through their accessibility tree.** New tools `desktop_snapshot`, `desktop_find`, `desktop_action` and `desktop_list_apps`, in the text chat and in voice calls, on macOS and Windows. jojo reads an app's interface as a list of controls, each with a reference, and clicks, types, picks options, ticks boxes or scrolls on that exact control. That is more precise than finding a spot on a screenshot, and most actions do not move your mouse. It uses the bundled [agent-desktop](https://github.com/ethando1984/agent-desktop) (Apache-2.0).
+- Same rules as mouse and keyboard control: one **Allow** opens a 5-minute session, **`Esc`** stops it at once, at most 30 actions a minute. jojo never reads or clicks its own windows or the system's sign-in and password prompts, and never types into a password field.
+- Since v2.0.0: answers from your **Knowledge Base** and from the **web** (`search_knowledge_base`, `web_search`, `browse_url`).
 
 ---
 
@@ -42,12 +47,12 @@
 **Requirements:** macOS 12.0 or later (Apple Silicon `M1/M2/M3/M4` and Intel).
 
 ### Option 1: the `.dmg` installer (recommended)
-1. Download **`JojoAgent-macos-universal-v1.4.2.dmg`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (or take **`JojoAgent.dmg`** straight from this repository).
+1. Download **`JojoAgent-macos-universal-v2.1.0.dmg`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (or take **`JojoAgent.dmg`** straight from this repository).
 2. Double-click the `.dmg`, then drag **`JojoAgent.app`** onto the **`Applications`** folder.
 3. Open **`JojoAgent`** from **Applications** or **Launchpad**. If macOS asks you to confirm the first launch, choose **Open** (or run `xattr -cr /Applications/JojoAgent.app` in Terminal).
 
 ### Option 2: the `.zip` or the `.app` directly
-1. Download **`JojoAgent-macos-universal-v1.4.2.zip`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) and unzip it (or take the **`JojoAgent.app`** folder from this repository).
+1. Download **`JojoAgent-macos-universal-v2.1.0.zip`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) and unzip it (or take the **`JojoAgent.app`** folder from this repository).
 2. Drag **`JojoAgent.app`** into **`/Applications`** and open it.
 
 ---
@@ -59,7 +64,7 @@
 **Requirements:** Windows 10 (version 2004 or later) or Windows 11, 64-bit (x64). A microphone for voice calls.
 
 ### Option 1: the installer (recommended)
-1. Download **`JojoAgent-windows-x64-v1.4.2-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v1.4.2-windows-preview).
+1. Download **`JojoAgent-windows-x64-v2.1.0-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v2.1.0-windows-preview).
 2. Run it. Because the preview is not code-signed, Windows SmartScreen shows a warning: choose **More info → Run anyway**.
 3. Follow the installer. It installs for your Windows account only (no administrator prompt), adds a Start menu shortcut, and installs Microsoft Edge WebView2 Runtime if your PC does not have it.
 4. JojoAgent starts with an icon in the system tray (near the clock) and the **jojo** orb at the bottom-right of the screen.
@@ -67,13 +72,13 @@
 To remove it: **Settings → Apps → Installed apps → JojoAgent → Uninstall**.
 
 ### Option 2: portable `.zip`
-Download **`JojoAgent-windows-x64-v1.4.2-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
+Download **`JojoAgent-windows-x64-v2.1.0-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
 
 ### What is different on Windows
 - **Tray icon instead of the menu bar:** left-click the tray icon to open the chat, right-click it for the menu. The global shortcut is **`Ctrl+Alt+J`**.
 - **Sign-in storage:** the token is encrypted with Windows DPAPI for your Windows account (`%APPDATA%\JojoAgent`), and is never given to the app's web page.
 - **Calendar and reminders** use classic Outlook when it is installed. Without it, creating an event or reminder opens an `.ics` file in your calendar app for you to save, and listing events or reminders is not available.
-- **Mouse and keyboard control** needs no extra permission, but cannot act on windows that run as administrator.
+- **Mouse and keyboard control** and **operating apps** (`desktop_*`) need no extra permission, but cannot act on windows that run as administrator. For `desktop_*`, `app` is the process name (`notepad`, `msedge`, …).
 - **Image attachments:** PNG, JPEG, GIF, BMP and TIFF (HEIC is not supported).
 - If something goes wrong, errors are written to `%LOCALAPPDATA%\JojoAgent\jojo.log`.
 
@@ -94,6 +99,7 @@ The steps below describe the macOS app. On Windows the same features are reached
 **Jojo can call tools** when you ask (the chat shows *“Đang dùng công cụ: …”* (Using tool: …) and a 🔧 label):
 - *Runs by itself (read-only):* capture and analyse the screen, get the date and time, read the clipboard, see which app you were using, get system information.
 - *Always asks you first (Allow / Deny):* open a web page, open an app, read a text file (only in Desktop / Documents / Downloads), create or overwrite a file (only in `~/Documents/JojoAgent`), add a calendar event, add a reminder, list the next 7 days of your calendar, list unfinished reminders.
+- *Operate apps (same session as the mouse and keyboard):* `desktop_list_apps`, `desktop_snapshot` (read an app's interface; big apps first as an outline), `desktop_find` (find a button, field or menu item by name), `desktop_action` (click, type, set a value, select an option, check / uncheck, expand, scroll… on one control). jojo prefers these and verifies each step with a fresh snapshot. What it reads from an app is sent to the jojo server as part of the conversation and treated as data, never as instructions. On macOS this uses the same **Accessibility** permission (if System Settings also lists `agent-desktop`, turn it on too). On Windows it cannot act on windows that run as administrator, and a minimized window cannot be read.
 - *Mouse and keyboard control (one Allow opens a 5-minute session):* `click_on_screen`, `type_text`, `press_key`, `scroll_screen`. jojo looks at a fresh screenshot to find what to click, never types into password fields, and is limited to 30 actions per minute. **Press `Esc` at any time to stop.** On macOS this needs JojoAgent enabled under **System Settings › Privacy & Security › Accessibility**; on Windows it cannot act on windows that run as administrator.
 - **During a voice call** jojo can also use the calendar, reminders, open apps / web pages and get the date and time, through the same Allow / Deny dialog (you approve with a click). With the gpt-live model this needs an up-to-date gateway server.
 
@@ -133,7 +139,7 @@ The steps below describe the macOS app. On Windows the same features are reached
 
 ---
 
-## 🔒 Security and performance (v1.4.2)
+## 🔒 Security and performance
 - The token / API key is stored in the **macOS Keychain** (on Windows: encrypted with DPAPI), never as plain text, and is never handed to the app's web page. Signing in with an account is handled entirely inside the app.
 - The app only calls the configured AitechAsia server (HTTPS); tokens and passwords are masked in the internal log.
 - **Account… → Sign out** removes the token from the Keychain.

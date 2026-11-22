@@ -8,13 +8,35 @@
 		<data>
 		z+3alN0iIqZewnzZxDm+f4rOR8g=
 		</data>
+		<key>Resources/agent-desktop-LICENSE.txt</key>
+		<data>
+		K4uBUimqimHkg/tLoFiLi2xJGJA=
+		</data>
 		<key>Resources/index.html</key>
 		<data>
-		EPslN82ddAMgzOstszA4djAAipQ=
+		GKhzPKiux39m7w/eNskM3v3t7Vs=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>Helpers/agent-desktop</key>
+		<dict>
+			<key>cdhash</key>
+			<data>
+			fLZMnuc7Fd+oFmoyo3F/eWgWITQ=
+			</data>
+			<key>requirement</key>
+			<string>identifier "agent-desktop" and certificate leaf = H"faa4a3450860452a6bf01577ce4c0fc918eda2c5"</string>
+		</dict>
+		<key>Helpers/agent-desktop-macos-helper</key>
+		<dict>
+			<key>cdhash</key>
+			<data>
+			5nHP77dPpmvJGkynPPw9Pd9LpW8=
+			</data>
+			<key>requirement</key>
+			<string>identifier "agent-desktop-macos-helper" and certificate leaf = H"faa4a3450860452a6bf01577ce4c0fc918eda2c5"</string>
+		</dict>
 		<key>Resources/Orb.icns</key>
 		<dict>
 			<key>hash2</key>
@@ -22,11 +44,18 @@
 			Vs0FWYfE9FwK9YOiS3W3FHo1rUFt7g1bWpTODr/XRgE=
 			</data>
 		</dict>
+		<key>Resources/agent-desktop-LICENSE.txt</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			z8d0m5b2O9McPEK1xHG/dWgUBT6EfBDz6wA0F7xSPTA=
+			</data>
+		</dict>
 		<key>Resources/index.html</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			KCC3+jTaWdyBPS5K8E1bl+QXAj0ATrPldBt9Fh5zv08=
+			HLZbhoPEb320V6D3YCmeYQoLBtj2nYtxAUg7N9tX6Yk=
 			</data>
 		</dict>
 	</dict>
