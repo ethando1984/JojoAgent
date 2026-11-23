@@ -1258,17 +1258,37 @@ function liveClientTools() {
 }
 
 let nativeVoiceTools = [];
+// JoJo Guardian's child mode: the host sends what the call must know about the child, in place of the
+// instructions about operating the computer (those tools are not offered then)
+let nativeVoiceInstructions = null;
 const nativeVoiceToolNames = () => new Set(nativeVoiceTools.map(t => t.name));
+const voiceActionInstructions = () => nativeVoiceInstructions !== null
+  ? nativeVoiceInstructions
+  : (nativeVoiceTools.length > 1 + WEB_TOOLS.length ? VOICE_ACTION_INSTRUCTIONS : '');
 async function loadNativeVoiceTools() {
   nativeVoiceTools = [KB_TOOL, ...WEB_TOOLS];
+  nativeVoiceInstructions = null;
   if (!window.webkit?.messageHandlers?.nativeTool?.postMessage) return nativeVoiceTools;
   try {
     const res = await window.webkit.messageHandlers.nativeTool.postMessage({ action: 'list' });
     if (res?.ok && Array.isArray(res.tools)) nativeVoiceTools = [KB_TOOL, ...WEB_TOOLS, ...res.tools.filter(t => t && t.name && t.parameters && t.name !== KB_TOOL.name && !WEB_TOOL_NAMES.has(t.name))];
+    if (res?.ok && typeof res.instructions === 'string') nativeVoiceInstructions = ' ' + res.instructions.trim();
   } catch { /* keep the call working without them */ }
   return nativeVoiceTools;
 }
+// The web and Knowledge Base tools run here, not in the host: the host's policy (JoJo Guardian) vets them first
+async function vetPageVoiceTool(name, argumentsJSON) {
+  if (!window.webkit?.messageHandlers?.nativeTool?.postMessage) return null;
+  try {
+    const res = await window.webkit.messageHandlers.nativeTool.postMessage({ action: 'vet', name, arguments: argumentsJSON || '{}' });
+    return res && res.ok === false && typeof res.output === 'string' ? res.output : null;
+  } catch { return null; }   // an older host without vet: as before
+}
 async function callNativeVoiceTool(name, argumentsJSON) {
+  if (name === KB_TOOL.name || WEB_TOOL_NAMES.has(name)) {
+    const refusal = await vetPageVoiceTool(name, argumentsJSON);
+    if (refusal) return refusal;
+  }
   if (name === KB_TOOL.name) return searchKnowledgeBase(argumentsJSON);
   if (WEB_TOOL_NAMES.has(name)) return runWebTool(name, argumentsJSON);
   try {
@@ -2055,7 +2075,7 @@ async function startCall() {
     }
 
     if (voiceApi === 'gemini') {
-      const actionInstructions = (nativeVoiceTools.length > 1 + WEB_TOOLS.length ? VOICE_ACTION_INSTRUCTIONS : '') + KB_INSTRUCTIONS;
+      const actionInstructions = voiceActionInstructions() + KB_INSTRUCTIONS;
       const session = await httpRequest(endpointUrl(GEMINI_SESSIONS_PATH), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -2175,7 +2195,7 @@ async function startCall() {
     if (mySession !== callSessionId) return;
 
     const isLive = voiceApi === 'live';
-    const actionInstructions = (nativeVoiceTools.length > 1 + WEB_TOOLS.length ? VOICE_ACTION_INSTRUCTIONS : '') + KB_INSTRUCTIONS;
+    const actionInstructions = voiceActionInstructions() + KB_INSTRUCTIONS;
     const answer = await openRealtimeCall({
       model: activeModelName,
       sdp: offer.sdp || '',
