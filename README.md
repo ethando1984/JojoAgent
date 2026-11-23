@@ -4,14 +4,27 @@
 
 | Platform | Status | Download |
 | :--- | :--- | :--- |
-| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v2.3.0` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
-| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v2.3.0-windows-preview) |
+| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v2.3.1` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
+| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v2.3.1-windows-preview) |
 
-## ✨ What's new in v2.3.0
+## ✨ What's new in v2.3.1
 - **`desktop_inspect`: diagnose one window exactly.** Until now the model had two separate ways to look at a window: the accessibility tree (exact text and controls, but blind to what is only drawn) and a screenshot of the whole screen (sees everything, but reads small text by guessing). The new tool reads the window's tree **and** takes a picture of that same window, then a vision model compares the two and tells you what state the window is in (page, dialog, error, still loading, asking you to sign in), what only the picture shows (images, charts, colours), where picture and tree disagree, and what to do next. The full tree, with refs the model can act on, comes back too; if the picture cannot be taken the tree still comes back. The model is told to use it when a plain snapshot is empty or confusing, since it costs one extra vision call. Available in chat and from the Hub (not in voice calls), on macOS and Windows (on Windows, when the window picture cannot be taken, the whole screen is used and the model is told).
 - **Rules from the Hub now cover this computer.** With the current Hub, what it may do on your computer is governed by *Guardrails & Validators*: first the rules your administrator set (they hold for everyone), then your own, which can add to them but never lift them. A rule can limit tools, apps and web sites, and the usual content rules also check what you type, what the screen shows and what the model answers. A refused command never reaches your computer and shows as **Blocked** on the *My computers* page. If the rules cannot be checked, nothing is sent.
 
 > The Hub-side rules need the current jojo server (nothing changes in how the app asks for consent, shows 🔴 or stops with `Esc`).
+
+## ✨ What's new in v2.3.1
+- **Reconnects by itself.** If you signed in again after your old session had expired, the Hub could still hold the key of this computer while the app had forgotten it: pairing was refused, remote control switched itself off ("máy đã có khoá trên Hub") and asked for your consent again every time. The app now revokes that stale key with your sign-in and pairs again, once per start, without you doing anything.
+- **Consent is asked once per account.** Switching remote control off and on again no longer asks again. It asks again after **Esc**, after **Ngắt máy này** from the Hub, when the key was revoked, after signing out, or for another account.
+- **Waits instead of failing at 30 actions a minute.** An action that finds the minute full waits (up to 30 s) for room instead of being refused; Esc during the wait stops it.
+- **Windows with no accessibility tree.** A window that does not expose one (some Electron apps, games, canvases) is now described from its picture instead of just returning an error.
+- **`desktop_action` can verify itself.** With `expect` the answer says in the same call whether the change you wanted was seen (`verified: true / false`).
+- **Dialogs that block are named.** When a sheet, alert or menu opens after an action, the result says so and how to answer it.
+- **Windows:** a tool error now says where it came from, which helps find the rare "JsonSerializerOptions" failure.
+- With the current Hub: per-app hints for the model (administrators edit them), the model is stopped when it repeats itself, and *My computers* shows the rules that applied and how well control goes.
+
+### v2.3.0
+- **`desktop_inspect`** and Hub rules for this computer (see the release notes of v2.3.0).
 
 ### v2.2.0
 - **Control this computer from the Hub chat (optional, off by default).** In the Hub's Playground (MCP mode) you can pick this computer and ask for something ("check my email", "open Facebook and look up …"): jojo opens the app or page, reads it through its accessibility tree, acts, checks the result and keeps going until the goal is done. Switch it on in the menu: **◉ › Điều khiển từ Hub** (Windows: tray icon). The app asks for your consent **once, when you switch it on**; after that, commands from the Hub run **without an Allow dialog**, because nobody may be at the computer to click.
@@ -59,12 +72,12 @@ Earlier: **v2.1.0** added operating apps through their accessibility tree (`desk
 **Requirements:** macOS 12.0 or later (Apple Silicon `M1/M2/M3/M4` and Intel).
 
 ### Option 1: the `.dmg` installer (recommended)
-1. Download **`JojoAgent-macos-universal-v2.3.0.dmg`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (or take **`JojoAgent.dmg`** straight from this repository).
+1. Download **`JojoAgent-macos-universal-v2.3.1.dmg`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (or take **`JojoAgent.dmg`** straight from this repository).
 2. Double-click the `.dmg`, then drag **`JojoAgent.app`** onto the **`Applications`** folder.
 3. Open **`JojoAgent`** from **Applications** or **Launchpad**. If macOS asks you to confirm the first launch, choose **Open** (or run `xattr -cr /Applications/JojoAgent.app` in Terminal).
 
 ### Option 2: the `.zip` or the `.app` directly
-1. Download **`JojoAgent-macos-universal-v2.3.0.zip`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) and unzip it (or take the **`JojoAgent.app`** folder from this repository).
+1. Download **`JojoAgent-macos-universal-v2.3.1.zip`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) and unzip it (or take the **`JojoAgent.app`** folder from this repository).
 2. Drag **`JojoAgent.app`** into **`/Applications`** and open it.
 
 ---
@@ -76,7 +89,7 @@ Earlier: **v2.1.0** added operating apps through their accessibility tree (`desk
 **Requirements:** Windows 10 (version 2004 or later) or Windows 11, 64-bit (x64). A microphone for voice calls.
 
 ### Option 1: the installer (recommended)
-1. Download **`JojoAgent-windows-x64-v2.3.0-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v2.3.0-windows-preview).
+1. Download **`JojoAgent-windows-x64-v2.3.1-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v2.3.1-windows-preview).
 2. Run it. Because the preview is not code-signed, Windows SmartScreen shows a warning: choose **More info → Run anyway**.
 3. Follow the installer. It installs for your Windows account only (no administrator prompt), adds a Start menu shortcut, and installs Microsoft Edge WebView2 Runtime if your PC does not have it.
 4. JojoAgent starts with an icon in the system tray (near the clock) and the **jojo** orb at the bottom-right of the screen.
@@ -84,7 +97,7 @@ Earlier: **v2.1.0** added operating apps through their accessibility tree (`desk
 To remove it: **Settings → Apps → Installed apps → JojoAgent → Uninstall**.
 
 ### Option 2: portable `.zip`
-Download **`JojoAgent-windows-x64-v2.3.0-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
+Download **`JojoAgent-windows-x64-v2.3.1-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
 
 ### What is different on Windows
 - **Tray icon instead of the menu bar:** left-click the tray icon to open the chat, right-click it for the menu. The global shortcut is **`Ctrl+Alt+J`**.
