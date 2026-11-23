@@ -14,7 +14,7 @@
 		</data>
 		<key>Resources/index.html</key>
 		<data>
-		OW/WUQkJNIlFiefpaQxoTXMhOFw=
+		TrCmXy6xfjjUjAcop1oW5bBx22s=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -37,6 +37,15 @@
 			<key>requirement</key>
 			<string>identifier "agent-desktop-macos-helper" and certificate leaf = H"faa4a3450860452a6bf01577ce4c0fc918eda2c5"</string>
 		</dict>
+		<key>Helpers/jojo-guardian-watch</key>
+		<dict>
+			<key>cdhash</key>
+			<data>
+			srjhjRH7L1Uils6lxZsjDLDV+0k=
+			</data>
+			<key>requirement</key>
+			<string>identifier "jojo-guardian-watch" and certificate leaf = H"faa4a3450860452a6bf01577ce4c0fc918eda2c5"</string>
+		</dict>
 		<key>Resources/Orb.icns</key>
 		<dict>
 			<key>hash2</key>
@@ -55,7 +64,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			XSxz88sIi5sD+iVghr5xeio1C8RvEW/H0Ye+BrgKoYQ=
+			zcNEoNKEHkPBEZ6n2YHcyZKkZEqT1dvFeFZkbywfcdo=
 			</data>
 		</dict>
 	</dict>

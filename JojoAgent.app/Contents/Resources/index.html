@@ -258,7 +258,8 @@ const VOICE_CALLS_PATH = '/agents-api/api/web/voice-calls';
 const VOICE_MODELS_PATH = '/gateway-api/v1/models?modality=voice';
 const CHAT_COMPLETIONS_PATH = '/v1/chat/completions';
 const AUTH_LOGIN_PATH = '/gateway-api/api/auth/login';
-const SCREEN_ANALYSIS_MODEL = 'auto';
+// The model for screen analysis: the Hub's setting (Settings › Ứng dụng JoJo), else auto
+const screenAnalysisModel = () => (typeof config?.screenModel === 'string' && config.screenModel.trim()) || 'auto';
 const INPUT_TRANSCRIPTION_MODEL = 'gpt-4o-mini-transcribe';
 const DEFAULT_DELEGATE_MODEL = 'gpt-6-luna';
 const DEFAULT_OPENING = 'You are jojo, a helpful voice assistant. Greet the user warmly ("jojo xin chào, hello, こんにちは, 안녕하세요 ...") and ask how you can help.';
@@ -316,7 +317,9 @@ const config = {
   // learns whether one exists. Browser preview: the token is kept in memory only, never persisted.
   hasToken: !!window.__AIHUB_CONFIG__?.hasToken,
   model: window.__AIHUB_CONFIG__?.model || readStorage('aihub_model') || '',
-  delegateModel: DEFAULT_DELEGATE_MODEL,
+  // From the Hub's settings (Settings › Ứng dụng JoJo), passed by the host; empty = the defaults here
+  delegateModel: window.__AIHUB_CONFIG__?.delegateModel || DEFAULT_DELEGATE_MODEL,
+  screenModel: window.__AIHUB_CONFIG__?.screenModel || '',
 };
 let browserToken = '';
 const hasCredentials = () => (native ? config.hasToken : !!browserToken);
@@ -942,7 +945,7 @@ async function requestScreenAnalysis(question, imageDataUrl, windowText = null) 
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: {
-      model: SCREEN_ANALYSIS_MODEL,
+      model: screenAnalysisModel(),
       stream: false,
       max_tokens: 512,
       messages: [
@@ -1052,6 +1055,7 @@ function sendVoiceScreenCommentary(analysis) {
 
 async function analyzeScreenForQuestion(question, turnId = null, options = {}) {
   const fromToolCall = !!options?.fromToolCall;
+  if (voiceScreenOff()) return 'Chụp màn hình trong cuộc gọi đang tắt (Hub › Settings › Ứng dụng JoJo).';
   if (turnId && analyzedTurnIds.has(turnId)) return lastScreenAnalysisResult;
   if (
     fromToolCall &&
@@ -1080,8 +1084,8 @@ async function analyzeScreenForQuestion(question, turnId = null, options = {}) {
   stickToBottom = true;
   const startedAt = performance.now();
   const prevPhase = phase;
-  statusBanner = { text: '📸 Đang chụp & phân tích màn hình (model: auto)…', isError: false };
-  appendConsoleLog('info', 'VISION', `Chụp màn hình & phân tích (model: ${SCREEN_ANALYSIS_MODEL}): "${question || ''}"`);
+  statusBanner = { text: `📸 Đang chụp & phân tích màn hình (model: ${screenAnalysisModel()})…`, isError: false };
+  appendConsoleLog('info', 'VISION', `Chụp màn hình & phân tích (model: ${screenAnalysisModel()}): "${question || ''}"`);
   renderChatSubtitles();
   if (callStatus === 'live') syncPhase('thinking');
 
@@ -1100,7 +1104,7 @@ async function analyzeScreenForQuestion(question, turnId = null, options = {}) {
         name: 'screen_caption',
         ok: true,
         ms,
-        data: { model: SCREEN_ANALYSIS_MODEL, endpoint: CHAT_COMPLETIONS_PATH, question: question || '', output: analysis },
+        data: { model: screenAnalysisModel(), endpoint: CHAT_COMPLETIONS_PATH, question: question || '', output: analysis },
       });
 
       const screenTurn = {
@@ -1131,7 +1135,7 @@ async function analyzeScreenForQuestion(question, turnId = null, options = {}) {
         name: 'screen_caption',
         ok: false,
         ms: Math.round(performance.now() - startedAt),
-        data: { model: SCREEN_ANALYSIS_MODEL, error: msg },
+        data: { model: screenAnalysisModel(), error: msg },
       });
       window.aiHubShowError(msg);
       if (callStatus === 'live' && prevPhase !== 'thinking') syncPhase(prevPhase);
@@ -1261,18 +1265,35 @@ let nativeVoiceTools = [];
 // JoJo Guardian's child mode: the host sends what the call must know about the child, in place of the
 // instructions about operating the computer (those tools are not offered then)
 let nativeVoiceInstructions = null;
+// From the Hub's settings (Settings › Ứng dụng JoJo): the user's own extra instructions, and the tool groups this page
+// runs itself (web, knowledge base, screen) that are switched off for calls
+let nativeVoiceExtraInstructions = '';
+let pageToolsOff = new Set();
+const voiceScreenOff = () => pageToolsOff.has('screen');
+const voiceExtraInstructions = () => (voiceScreenOff()
+  ? ' Screen capture is switched off for calls in the user\'s Hub settings: if asked to look at the screen, say so instead of trying.'
+  : '') + nativeVoiceExtraInstructions;
 const nativeVoiceToolNames = () => new Set(nativeVoiceTools.map(t => t.name));
 const voiceActionInstructions = () => nativeVoiceInstructions !== null
   ? nativeVoiceInstructions
-  : (nativeVoiceTools.length > 1 + WEB_TOOLS.length ? VOICE_ACTION_INSTRUCTIONS : '');
+  : (nativeVoiceTools.some(t => t.name !== KB_TOOL.name && !WEB_TOOL_NAMES.has(t.name)) ? VOICE_ACTION_INSTRUCTIONS : '');
 async function loadNativeVoiceTools() {
   nativeVoiceTools = [KB_TOOL, ...WEB_TOOLS];
   nativeVoiceInstructions = null;
+  nativeVoiceExtraInstructions = '';
+  pageToolsOff = new Set();
   if (!window.webkit?.messageHandlers?.nativeTool?.postMessage) return nativeVoiceTools;
   try {
     const res = await window.webkit.messageHandlers.nativeTool.postMessage({ action: 'list' });
-    if (res?.ok && Array.isArray(res.tools)) nativeVoiceTools = [KB_TOOL, ...WEB_TOOLS, ...res.tools.filter(t => t && t.name && t.parameters && t.name !== KB_TOOL.name && !WEB_TOOL_NAMES.has(t.name))];
+    if (res?.ok && Array.isArray(res.page_tools_off)) pageToolsOff = new Set(res.page_tools_off.filter(g => typeof g === 'string'));
+    const pageTools = [
+      ...(pageToolsOff.has('knowledge') ? [] : [KB_TOOL]),
+      ...(pageToolsOff.has('web') ? [] : WEB_TOOLS),
+    ];
+    nativeVoiceTools = pageTools;
+    if (res?.ok && Array.isArray(res.tools)) nativeVoiceTools = [...pageTools, ...res.tools.filter(t => t && t.name && t.parameters && t.name !== KB_TOOL.name && !WEB_TOOL_NAMES.has(t.name))];
     if (res?.ok && typeof res.instructions === 'string') nativeVoiceInstructions = ' ' + res.instructions.trim();
+    if (res?.ok && typeof res.extra_instructions === 'string' && res.extra_instructions.trim()) nativeVoiceExtraInstructions = ' ' + res.extra_instructions.trim();
   } catch { /* keep the call working without them */ }
   return nativeVoiceTools;
 }
@@ -2075,7 +2096,7 @@ async function startCall() {
     }
 
     if (voiceApi === 'gemini') {
-      const actionInstructions = voiceActionInstructions() + KB_INSTRUCTIONS;
+      const actionInstructions = voiceActionInstructions() + KB_INSTRUCTIONS + voiceExtraInstructions();
       const session = await httpRequest(endpointUrl(GEMINI_SESSIONS_PATH), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -2195,7 +2216,7 @@ async function startCall() {
     if (mySession !== callSessionId) return;
 
     const isLive = voiceApi === 'live';
-    const actionInstructions = voiceActionInstructions() + KB_INSTRUCTIONS;
+    const actionInstructions = voiceActionInstructions() + KB_INSTRUCTIONS + voiceExtraInstructions();
     const answer = await openRealtimeCall({
       model: activeModelName,
       sdp: offer.sdp || '',
@@ -2206,7 +2227,7 @@ async function startCall() {
         delegate_model: config.delegateModel || DEFAULT_DELEGATE_MODEL,
         delegate_instructions: `${DELEGATE_SCREEN_INSTRUCTIONS}${actionInstructions}`,
         delegate_reasoning_effort: 'medium',
-        delegate_web_search: true,
+        delegate_web_search: !pageToolsOff.has('web'),
         team_tools: true,
         ...(liveClientTools().length ? { client_tools: liveClientTools() } : {}),
       } : {}),
@@ -2486,6 +2507,8 @@ window.aiHubSetConfig = function(nextCfg, autoStart = false) {
       writeStorage('aihub_model', config.model);
       resolvedModelCache = null;
     }
+    if (typeof nextCfg.delegateModel === 'string') config.delegateModel = nextCfg.delegateModel.trim() || DEFAULT_DELEGATE_MODEL;
+    if (typeof nextCfg.screenModel === 'string') config.screenModel = nextCfg.screenModel.trim();
   }
   appendConsoleLog('info', 'CFG', `Đã cập nhật cấu hình (baseUrl: ${config.baseUrl}, model: ${config.model || 'auto'})`);
   if (autoStart && callStatus === 'idle') {

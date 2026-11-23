@@ -4,18 +4,26 @@
 
 | Platform | Status | Download |
 | :--- | :--- | :--- |
-| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v2.4.0` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
-| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v2.4.0-windows-preview) |
+| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v2.5.0` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
+| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v2.5.0-windows-preview) |
 
-## ✨ What's new in v2.4.0: JoJo Guardian, child protection
+## ✨ What's new in v2.5.0: settings from the Hub, app and site rules, the guardian watch
+- **Set up every computer once, on the Hub.** The Hub's **Cài đặt** (Settings) page has a new **Ứng dụng JoJo** section. Choose the models for text chat, for the screen and images, for voice calls and for the assistant behind live calls. Switch tool groups on or off, separately for chat and for calls. Keep or drop the chat history on the computer, and add your own instructions for jojo (up to 2000 characters). Every JojoAgent signed in to your account picks them up when it starts, at sign-in, when a call starts and every 5 minutes, and keeps the last copy for when the Hub cannot be reached. Remote control (**Điều khiển từ Hub**) still has to be switched on at each computer.
+- **JoJo Guardian moves to My computers.** Child protection is now the **Bảo vệ trẻ em** tab of the Hub's **Máy tính của tôi** (My computers) page.
+- **Pick apps from the computer's own list.** JojoAgent sends the Hub the list of apps installed on the computer (names and ids only, no usage), even before protection is on, so a parent can set everything up first. For each app choose *as usual*, *always allowed*, *blocked*, or a limit group.
+- **Web rules in the browser.** For each site choose *blocked*, *allowed*, or *minutes a day* (subdomains included), or allow only the listed sites. JojoAgent reads the address of the tab in front (macOS: Accessibility; Windows: UI Automation) in Safari, Chrome, Edge, Brave, Arc, Firefox, Opera, Vivaldi and Cốc Cốc. It counts the time per site and gives notices 5 and 1 minutes ahead. The tab of a blocked site is closed after a notice (⌘W / Ctrl+W); when a site's minutes run out mid-use, the child gets one more minute first. The Hub shows the minutes per site (domain only) and every closed tab.
+- **Quitting JojoAgent no longer ends protection.** While a computer is protected, a small background watch reopens JojoAgent about 10 seconds after it is quit or killed. It needs no administrator install (macOS: a launchd agent running `Contents/Helpers/jojo-guardian-watch`; Windows: `JojoGuardian.exe`, started at sign-in). If the watch is removed, JojoAgent puts it back and the Hub shows a tamper event. On macOS the first protection may show "Background Items Added". Lifting protection on the Hub removes the watch.
+- **Not yet:** browsers not named above, and apps with their own built-in browser, are not filtered (network-level filtering comes later). A child who switches off both JojoAgent and its watch (Login Items / Startup apps), or who has administrator rights, can still stop protection; the Hub then shows the computer as silent. Give the child a standard (non-administrator) account.
+
+> Needs the current jojo server. Set it up on the Hub: **Máy tính của tôi › Bảo vệ trẻ em** (see *How to use it › 6* below) and **Cài đặt › Ứng dụng JoJo** (see *7*). Computers still on JojoAgent 2.4 keep working but ignore the new settings and send no app list.
+
+### v2.4.0: JoJo Guardian, child protection
 For a child's computer: a parent sets the rules on the Hub, and JojoAgent enforces them on the computer, **even offline**. The app looks the same as before: there is no new window, and notices come as system notifications (Windows: tray balloons) and in jojo's own answers.
 - **Screen time.** Only the time an app is in front and in use counts (no keyboard or mouse for 2 minutes stops the count, unless a video is playing). You can set a daily total, a bedtime, a "rest your eyes" reminder and per-app limits; 0 minutes blocks an app. The child gets a notice 5 and 1 minutes before the time runs out. When it runs out mid-use, the app stays open one more minute so the child can save, then it is asked to close (it can still ask to save) and is hidden if it stays in front. Settings, accessibility tools, Finder / Explorer and JojoAgent always stay usable, and so do the apps the parent always allows (for example a calling app).
 - **A safer assistant (child mode).** jojo talks for the child's age. It has no file, clipboard, screen or computer-control tools. It refuses sites the parent denies, or anything outside the allowed list. It does not open an app whose time is up. When the child is in trouble it points them to a trusted adult and to the 111 child helpline. The child can ask jojo *"how many minutes are left?"* or ask for more time; the request appears on the Hub for the parent to approve.
 - **Rules nobody else can change.** The Hub signs the rules, and every change needs the parent's **guardian PIN**. The app refuses a copy that was edited by hand, a copy made for another computer, an older version, and rules from another account signed in on the same computer. If someone tampers with the rules, changes the clock, or stops or starts JojoAgent, the Hub shows it to the parent.
 - **What is reported:** the app names and minutes per day, and the events above. A blocked site is reported by its domain only. Nothing is sent about window titles, page contents, messages or screenshots, and usage is only reported while protection is on (kept 30 days). Every JojoAgent now also reports its computer name, system and version to your account once an hour, so the computer shows up on the Hub's *Bảo vệ trẻ em* page.
 - **Not yet:** the browser itself is not filtered (a browser extension is next), and protection runs only while JojoAgent runs (quitting it shows on the Hub). Give the child a standard (non-administrator) account.
-
-> Needs the current jojo server. Set it up on the Hub: **Tools › Bảo vệ trẻ em** (see *How to use it › 6* below).
 
 ### v2.3.1
 - **Reconnects by itself.** If you signed in again after your old session had expired, the Hub could still hold the key of this computer while the app had forgotten it: pairing was refused, remote control switched itself off ("máy đã có khoá trên Hub") and asked for your consent again every time. The app now revokes that stale key with your sign-in and pairs again, once per start, without you doing anything.
@@ -79,12 +87,12 @@ Earlier: **v2.1.0** added operating apps through their accessibility tree (`desk
 **Requirements:** macOS 12.0 or later (Apple Silicon `M1/M2/M3/M4` and Intel).
 
 ### Option 1: the `.dmg` installer (recommended)
-1. Download **`JojoAgent-macos-universal-v2.4.0.dmg`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (or take **`JojoAgent.dmg`** straight from this repository).
+1. Download **`JojoAgent-macos-universal-v2.5.0.dmg`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) (or take **`JojoAgent.dmg`** straight from this repository).
 2. Double-click the `.dmg`, then drag **`JojoAgent.app`** onto the **`Applications`** folder.
 3. Open **`JojoAgent`** from **Applications** or **Launchpad**. If macOS asks you to confirm the first launch, choose **Open** (or run `xattr -cr /Applications/JojoAgent.app` in Terminal).
 
 ### Option 2: the `.zip` or the `.app` directly
-1. Download **`JojoAgent-macos-universal-v2.4.0.zip`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) and unzip it (or take the **`JojoAgent.app`** folder from this repository).
+1. Download **`JojoAgent-macos-universal-v2.5.0.zip`** from [**Releases**](https://github.com/ethando1984/JojoAgent/releases/latest) and unzip it (or take the **`JojoAgent.app`** folder from this repository).
 2. Drag **`JojoAgent.app`** into **`/Applications`** and open it.
 
 ---
@@ -96,7 +104,7 @@ Earlier: **v2.1.0** added operating apps through their accessibility tree (`desk
 **Requirements:** Windows 10 (version 2004 or later) or Windows 11, 64-bit (x64). A microphone for voice calls.
 
 ### Option 1: the installer (recommended)
-1. Download **`JojoAgent-windows-x64-v2.4.0-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v2.4.0-windows-preview).
+1. Download **`JojoAgent-windows-x64-v2.5.0-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v2.5.0-windows-preview).
 2. Run it. Because the preview is not code-signed, Windows SmartScreen shows a warning: choose **More info → Run anyway**.
 3. Follow the installer. It installs for your Windows account only (no administrator prompt), adds a Start menu shortcut, and installs Microsoft Edge WebView2 Runtime if your PC does not have it.
 4. JojoAgent starts with an icon in the system tray (near the clock) and the **jojo** orb at the bottom-right of the screen.
@@ -104,7 +112,7 @@ Earlier: **v2.1.0** added operating apps through their accessibility tree (`desk
 To remove it: **Settings → Apps → Installed apps → JojoAgent → Uninstall**.
 
 ### Option 2: portable `.zip`
-Download **`JojoAgent-windows-x64-v2.4.0-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
+Download **`JojoAgent-windows-x64-v2.5.0-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
 
 ### What is different on Windows
 - **Tray icon instead of the menu bar:** left-click the tray icon to open the chat, right-click it for the menu. The global shortcut is **`Ctrl+Alt+J`**.
@@ -166,10 +174,22 @@ The steps below describe the macOS app. On Windows the same features are reached
 5. The Hub's **My computers** page (Tools menu) lists your computers, every command with its result, time and address (grouped by request), and has **Ngắt máy này** (cut a computer off) and **Thu hồi khoá** (revoke its key).
 
 ### 6. Protect a child's computer (JoJo Guardian, optional)
-1. Install JojoAgent on the child's computer and sign it in (preferably with the child's own Hub account). Start it once: within a minute the computer appears on the Hub under **Tools › Bảo vệ trẻ em**.
-2. On that page choose **Quản lý** (Manage) for the computer. Set the child's name and age, the daily minutes, bedtime, app limits (one app per line: its name as shown, its macOS bundle id or its Windows process name; the page lists the apps seen on the computer), always-allowed apps, denied or allowed web sites and child mode. Choose a **guardian PIN** the first time and save. The computer applies the rules within 5 minutes and keeps them offline.
-3. The **Thời gian dùng** (Usage) tab shows the last 7 days. The **Sự kiện** (Events) tab shows apps closed, sites and tools refused, and requests for more time, which you can approve with your PIN (**Cho N phút**) or set aside.
-4. To lift everything, switch **Bảo vệ máy này** off and save with the PIN. Signing JojoAgent in with another account does not lift it.
+1. Install JojoAgent on the child's computer and sign it in (preferably with the child's own Hub account). Start it once: within a minute the computer appears on the Hub's **Máy tính của tôi** (My computers) page, tab **Bảo vệ trẻ em** (`https://hub.aitech.asia/devices?tab=guardian`).
+2. Choose **Quản lý** (Manage) for the computer. Set the child's name and age, the daily minutes, bedtime and child mode. Choose a **guardian PIN** the first time and save. The computer applies the rules within 5 minutes and keeps them offline.
+3. **Apps on this computer:** a table of the apps installed on the computer, with today's minutes. For each app choose *as usual* (counted in the daily total), *always allowed* (never counted nor closed, also at bedtime), *blocked*, or a limit group (a group shares its minutes a day between its apps; 0 minutes blocks them). A computer still on JojoAgent 2.4 has not sent its list: name the apps by hand (the name shown, the macOS bundle id or the Windows process name).
+4. **Web sites:** add a site and choose *blocked*, *allowed* or *minutes a day*; or allow only the allowed ones (**Chỉ các trang được phép**). It works in Safari, Chrome, Edge, Brave, Arc, Firefox, Opera, Vivaldi and Cốc Cốc. On macOS, JojoAgent needs the **Accessibility** permission to read the tab.
+5. The **Thời gian dùng** (Usage) tab shows the last 7 days, with the most used apps and sites. The **Sự kiện** (Events) tab shows apps and tabs closed, tools refused, and requests for more time, which you can approve with your PIN (**Cho N phút**) or set aside.
+6. While a computer is protected, quitting JojoAgent reopens it after about 10 seconds. To update JojoAgent there, switch protection off first, or quit it and replace the app within about 10 seconds.
+7. To lift everything, switch **Bảo vệ máy này** off and save with the PIN; this also removes the watch. Signing JojoAgent in with another account does not lift it.
+
+### 7. Set up JojoAgent for all your computers from the Hub (optional)
+On the Hub open **Cài đặt** (Settings, `https://hub.aitech.asia/settings`), section **Ứng dụng JoJo**:
+- **Models:** text chat, screen and images (choose a model that can read pictures), voice calls, and the assistant behind live calls. A model that is not running is marked, and requests to it fail.
+- **Tool groups:** switch each group on or off, separately for chat and for calls. A group that is off is not offered to jojo.
+- **Lưu lịch sử chat trên máy** (keep chat history on the computer): keeps the last 40 messages so a conversation goes on after reopening the app. Switching it off also deletes the copy saved on each computer.
+- **Lời dặn thêm cho trợ lý** (extra instructions): how jojo should answer (tone, language, how to address you), up to 2000 characters. It does not change the safety rules.
+
+Every JojoAgent 2.5 signed in to your account applies them within 5 minutes. On a protected child's computer, Guardian's child mode still applies on top.
 
 ---
 
