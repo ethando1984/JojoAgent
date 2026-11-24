@@ -4,10 +4,23 @@
 
 | Platform | Status | Download |
 | :--- | :--- | :--- |
-| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v2.6.0` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
-| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v2.6.0-windows-preview) |
+| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v2.7.0` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
+| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v2.7.0-windows-preview) |
 
-## ✨ What's new in v2.6.0: paste images into chat, a new chat panel, math and chemistry, study-screen checks
+## ✨ What's new in v2.7.0: a system-level guardian, study checks on Windows, tutor mode, new-version notice
+- **A guardian the child cannot switch off (optional, macOS and Windows).** On a protected computer, the ◉ menu (Windows: the tray menu) has **Bật lớp bảo vệ hệ thống…** (turn on the system protection layer). A parent signs in with an administrator account once; JojoAgent then installs a small system service (macOS: a LaunchDaemon; Windows: the `JojoGuardian` service) that a child on a standard account cannot stop or remove. It:
+  - blocks the sites denied on the Hub in **every browser and app**, through a marked block in the computer's hosts file (the site plus `www.` and `m.`; allowed sites are never blocked; the rest of the file is left as it is);
+  - reopens JojoAgent in the child's session when both JojoAgent and its watch were closed (after about 20 seconds, at most 3 times in 5 minutes);
+  - only follows rules signed by the Hub for this computer and this account. Lifting protection on the Hub makes it clean the hosts file and remove itself. The Hub shows when it starts, and a tamper event if it stops.
+  - Limits: other subdomains, the "only allowed sites" mode and browsers with their own DNS-over-HTTPS are not covered; a child with administrator rights can still remove it.
+- **Study-screen checks on Windows too.** A parent connected from the Hub can ask for a picture of the child's Windows screen and send the child a message (with a one-line reply when asked), as on the Mac. A pulsing green dot shows at the top of the child's screen at each capture. Screen only, never the camera.
+- **Tutor, not homework machine (child mode).** For homework and tests, jojo asks what the child already tried, explains with a similar example, gives one hint at a time and checks the child's answer instead of giving the finished answer. For essays it helps find ideas, make an outline and correct what the child wrote. Ordinary questions are answered as usual. Works in chat and in voice calls.
+- **New-version notice.** A minute after start and every 12 hours, JojoAgent checks this repository's latest release. When a newer one is out, the menu shows **Có bản mới x.y.z — Tải về** (new version, download) and you get one notification per version. Nothing is downloaded or installed by itself, and nothing about your account or computer is sent. To switch it off: `defaults write asia.aitech.jojo.agent jojo_update_check_disabled -bool YES` (macOS) or the environment variable `JOJO_NO_UPDATE_CHECK=1` (Windows).
+- **Parents on the phone: "JoJo cho phụ huynh".** A separate phone app at [parent.aitech.asia](https://parent.aitech.asia) (add it to the Home Screen) shows each child's computer: today's time, requests for more time (approve with the guardian PIN), a message to the child and the study screen, with push notifications. On the Hub's **Bảo vệ trẻ em** page, **Mở trên điện thoại** opens it.
+
+> The system layer, the Windows study checks and the parent app need the current jojo server and Hub.
+
+### v2.6.0: paste images into chat, a new chat panel, math and chemistry, study-screen checks
 - **Paste or drop images into the chat.** Press **⌘V** (Windows: **Ctrl+V**) to paste an image or a copied image file into the chat. You can also drop one on the **◉** icon (macOS) or onto the chat window (Windows). When the clipboard also holds text, ⌘V still pastes the text. An image you send shows as a small preview in the conversation. The saved history keeps only the text.
 - **A new chat panel.** The chat is now a dark panel with the animated jojo orb, a greeting with your name and three suggestions. The input bar has a **+** menu (attach a file, capture the screen) and a mic button that turns into **Send** once there is something to send.
 - **Math, physics and chemistry are easy to read.** When jojo answers with formulas, they show as symbols instead of raw code. For example: E = mc², x = (−b ± √(b² − 4ac))/(2a), ∫, Σ, α, β, Δ, 2H₂ + O₂ → 2H₂O, SO₄²⁻, 9.8 m/s². This works in the text chat (macOS and Windows) and in the voice-call subtitles. Code blocks and prices such as "$5" are left as written.
@@ -114,7 +127,7 @@ Earlier: **v2.1.0** added operating apps through their accessibility tree (`desk
 **Requirements:** Windows 10 (version 2004 or later) or Windows 11, 64-bit (x64). A microphone for voice calls.
 
 ### Option 1: the installer (recommended)
-1. Download **`JojoAgent-windows-x64-v2.5.0-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v2.5.0-windows-preview).
+1. Download **`JojoAgent-windows-x64-v2.7.0-preview-Setup.exe`** from the [**Windows preview release**](https://github.com/ethando1984/JojoAgent/releases/tag/v2.7.0-windows-preview).
 2. Run it. Because the preview is not code-signed, Windows SmartScreen shows a warning: choose **More info → Run anyway**.
 3. Follow the installer. It installs for your Windows account only (no administrator prompt), adds a Start menu shortcut, and installs Microsoft Edge WebView2 Runtime if your PC does not have it.
 4. JojoAgent starts with an icon in the system tray (near the clock) and the **jojo** orb at the bottom-right of the screen.
@@ -122,7 +135,7 @@ Earlier: **v2.1.0** added operating apps through their accessibility tree (`desk
 To remove it: **Settings → Apps → Installed apps → JojoAgent → Uninstall**.
 
 ### Option 2: portable `.zip`
-Download **`JojoAgent-windows-x64-v2.5.0-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
+Download **`JojoAgent-windows-x64-v2.7.0-preview.zip`**, unzip it anywhere and run **`JojoAgent.exe`**. This needs Microsoft Edge WebView2 Runtime, which Windows 11 and most Windows 10 PCs already have.
 
 ### What is different on Windows
 - **Tray icon instead of the menu bar:** left-click the tray icon to open the chat, right-click it for the menu. The global shortcut is **`Ctrl+Alt+J`**.
@@ -183,7 +196,7 @@ The steps below describe the macOS app. On Windows the same features are reached
 2. On the Hub (`https://hub.aitech.asia/playground/`) choose **MCP** mode, then pick this computer in **Máy tính:** (only your own computers that have the feature on are listed).
 3. Ask for what you want. jojo keeps going until it is done, in at most 40 tool steps per message. The model is instructed to stop and ask before sending, posting, deleting, buying or paying, but nothing on your computer enforces that, so word your requests carefully. The app itself never types into password fields, never touches its own windows or the system's sign-in prompts, and does at most 30 actions a minute.
 4. While it works, ◉ shows 🔴. **Press `Esc`** to stop and switch the feature off; switch it back on in the menu when you want it again.
-5. On a child's Mac (version 2.6 or later), the parent can also ask in the Hub chat for a **picture of the study screen**. The child sees a small green dot at the top of the screen each time. In the Playground, `/chat <message>` shows a message on the child's Mac and returns the child's one-line reply. These tools work only from the Hub.
+5. On a child's computer (Mac 2.6 or later, Windows 2.7 or later), the parent can also ask in the Hub chat for a **picture of the study screen**. The child sees a small green dot at the top of the screen each time. In the Playground, `/chat <message>` shows a message on the child's computer and returns the child's one-line reply. These tools work only from the Hub.
 6. The Hub's **My computers** page (Tools menu) lists your computers, every command with its result, time and address (grouped by request), and has **Ngắt máy này** (cut a computer off) and **Thu hồi khoá** (revoke its key).
 
 ### 6. Protect a child's computer (JoJo Guardian, optional)
@@ -193,7 +206,8 @@ The steps below describe the macOS app. On Windows the same features are reached
 4. **Web sites:** add a site and choose *blocked*, *allowed* or *minutes a day*; or allow only the allowed ones (**Chỉ các trang được phép**). It works in Safari, Chrome, Edge, Brave, Arc, Firefox, Opera, Vivaldi and Cốc Cốc. On macOS, JojoAgent needs the **Accessibility** permission to read the tab.
 5. The **Thời gian dùng** (Usage) tab shows the last 7 days, with the most used apps and sites. The **Sự kiện** (Events) tab shows apps and tabs closed, tools refused, and requests for more time, which you can approve with your PIN (**Cho N phút**) or set aside.
 6. While a computer is protected, quitting JojoAgent reopens it after about 10 seconds. To update JojoAgent there, switch protection off first, or quit it and replace the app within about 10 seconds.
-7. To lift everything, switch **Bảo vệ máy này** off and save with the PIN; this also removes the watch. Signing JojoAgent in with another account does not lift it.
+7. **Optional, so the child cannot switch it off:** on the child's computer choose **Bật lớp bảo vệ hệ thống…** in the ◉ menu (Windows: tray menu) and sign in with an administrator account once. Sites denied on the Hub are then blocked in every browser and app, and JojoAgent is reopened if it is closed. Give the child a standard account. You can follow everything from your phone in **JoJo cho phụ huynh** ([parent.aitech.asia](https://parent.aitech.asia)).
+8. To lift everything, switch **Bảo vệ máy này** off and save with the PIN; this also removes the watch and the system layer. Signing JojoAgent in with another account does not lift it.
 
 ### 7. Set up JojoAgent for all your computers from the Hub (optional)
 On the Hub open **Cài đặt** (Settings, `https://hub.aitech.asia/settings`), section **Ứng dụng JoJo**:

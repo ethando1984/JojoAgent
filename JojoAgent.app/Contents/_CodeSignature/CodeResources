@@ -41,6 +41,15 @@
 			<key>requirement</key>
 			<string>identifier "agent-desktop-macos-helper" and certificate leaf = H"faa4a3450860452a6bf01577ce4c0fc918eda2c5"</string>
 		</dict>
+		<key>Helpers/jojo-guardian-system</key>
+		<dict>
+			<key>cdhash</key>
+			<data>
+			+WZbhQBlqQAZW0nHnGc2zr1EiXg=
+			</data>
+			<key>requirement</key>
+			<string>identifier "jojo-guardian-system" and certificate leaf = H"faa4a3450860452a6bf01577ce4c0fc918eda2c5"</string>
+		</dict>
 		<key>Helpers/jojo-guardian-watch</key>
 		<dict>
 			<key>cdhash</key>
