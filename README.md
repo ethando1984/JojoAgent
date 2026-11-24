@@ -4,10 +4,20 @@
 
 | Platform | Status | Download |
 | :--- | :--- | :--- |
-| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v2.5.0` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
-| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v2.5.0-windows-preview) |
+| **macOS** 12+ (Apple Silicon and Intel) | Stable, `v2.6.0` | [Latest release](https://github.com/ethando1984/JojoAgent/releases/latest) |
+| **Windows** 10 / 11 (64-bit) | **Preview** | [Windows preview release](https://github.com/ethando1984/JojoAgent/releases/tag/v2.6.0-windows-preview) |
 
-## ✨ What's new in v2.5.0: settings from the Hub, app and site rules, the guardian watch
+## ✨ What's new in v2.6.0: paste images into chat, a new chat panel, math and chemistry, study-screen checks
+- **Paste or drop images into the chat.** Press **⌘V** (Windows: **Ctrl+V**) to paste an image or a copied image file into the chat. You can also drop one on the **◉** icon (macOS) or onto the chat window (Windows). When the clipboard also holds text, ⌘V still pastes the text. An image you send shows as a small preview in the conversation. The saved history keeps only the text.
+- **A new chat panel.** The chat is now a dark panel with the animated jojo orb, a greeting with your name and three suggestions. The input bar has a **+** menu (attach a file, capture the screen) and a mic button that turns into **Send** once there is something to send.
+- **Math, physics and chemistry are easy to read.** When jojo answers with formulas, they show as symbols instead of raw code. For example: E = mc², x = (−b ± √(b² − 4ac))/(2a), ∫, Σ, α, β, Δ, 2H₂ + O₂ → 2H₂O, SO₄²⁻, 9.8 m/s². This works in the text chat (macOS and Windows) and in the voice-call subtitles. Code blocks and prices such as "$5" are left as written.
+- **Study-screen checks from the Hub (macOS).** A parent connected to a child's Mac through **Điều khiển từ Hub** can now ask for a picture of its screen. The picture shows in the Hub chat. The parent can also send the child a message, and the child can type a one-line reply. In the Hub's Playground (**MCP** mode, the child's computer picked), `/chat <message>` sends the message directly. Each time the screen is captured, a small **green dot** appears at the top of the child's screen. This only captures the screen: never the camera, never a video. These tools work only from the Hub, never from the chat on the child's own Mac.
+- **Fixed:** a screen capture requested from the Hub now arrives whole. Before, it was cut and showed as a long block of text.
+- **New app icon** on Windows.
+
+> The study-screen checks and the `/chat` command need the current jojo server and Hub.
+
+### v2.5.0: settings from the Hub, app and site rules, the guardian watch
 - **Set up every computer once, on the Hub.** The Hub's **Cài đặt** (Settings) page has a new **Ứng dụng JoJo** section. Choose the models for text chat, for the screen and images, for voice calls and for the assistant behind live calls. Switch tool groups on or off, separately for chat and for calls. Keep or drop the chat history on the computer, and add your own instructions for jojo (up to 2000 characters). Every JojoAgent signed in to your account picks them up when it starts, at sign-in, when a call starts and every 5 minutes, and keeps the last copy for when the Hub cannot be reached. Remote control (**Điều khiển từ Hub**) still has to be switched on at each computer.
 - **JoJo Guardian moves to My computers.** Child protection is now the **Bảo vệ trẻ em** tab of the Hub's **Máy tính của tôi** (My computers) page.
 - **Pick apps from the computer's own list.** JojoAgent sends the Hub the list of apps installed on the computer (names and ids only, no usage), even before protection is on, so a parent can set everything up first. For each app choose *as usual*, *always allowed*, *blocked*, or a limit group.
@@ -132,6 +142,8 @@ The steps below describe the macOS app. On Windows the same features are reached
 **Left-click** the **◉** icon (or press **`⌥⌘J`** from any app) to open the chat with jojo. **Right-click** ◉ (or the **⋯** button) for the three-row menu: *Start / End call*, *Account…*, *Quit jojo*.
 
 - **Streaming replies + Markdown:** text appears as soon as the server sends it; **bold**, *italic*, `code`, code blocks, headings, lists, quotes and links are supported (links only to `http(s)` / `mailto`, and the real address always shows on hover).
+- **Formulas:** math, physics and chemistry in jojo's answers show as symbols (x², √, ∫, α, H₂O, →).
+- **Paste / drop an image:** **⌘V** pastes an image or a copied image file, and you can drop one on **◉**. The image is sent with your next message.
 - **📎 Attach:** a text file / PDF (≤ 2 MB, the first 20,000 characters are read) or an **image** (≤ 15 MB, downscaled automatically; an image too large for your plan is retried once in a compact version). A file is also handed to the voice call (immediately if a call is live, otherwise when one starts); images are used in chat only.
 - **Camera:** captures the screen and asks jojo about it (using what you typed in the input box, if anything). The first time, macOS asks for the Screen Recording permission.
 - **Chat history is kept between launches** (the last 40 messages, stored locally, without the contents of attached files or images). **Xoá** (Clear) or signing out deletes it; turn it off entirely with `defaults write asia.aitech.jojo.agent jojo_save_history -bool false`.
@@ -171,7 +183,8 @@ The steps below describe the macOS app. On Windows the same features are reached
 2. On the Hub (`https://hub.aitech.asia/playground/`) choose **MCP** mode, then pick this computer in **Máy tính:** (only your own computers that have the feature on are listed).
 3. Ask for what you want. jojo keeps going until it is done, in at most 40 tool steps per message. The model is instructed to stop and ask before sending, posting, deleting, buying or paying, but nothing on your computer enforces that, so word your requests carefully. The app itself never types into password fields, never touches its own windows or the system's sign-in prompts, and does at most 30 actions a minute.
 4. While it works, ◉ shows 🔴. **Press `Esc`** to stop and switch the feature off; switch it back on in the menu when you want it again.
-5. The Hub's **My computers** page (Tools menu) lists your computers, every command with its result, time and address (grouped by request), and has **Ngắt máy này** (cut a computer off) and **Thu hồi khoá** (revoke its key).
+5. On a child's Mac (version 2.6 or later), the parent can also ask in the Hub chat for a **picture of the study screen**. The child sees a small green dot at the top of the screen each time. In the Playground, `/chat <message>` shows a message on the child's Mac and returns the child's one-line reply. These tools work only from the Hub.
+6. The Hub's **My computers** page (Tools menu) lists your computers, every command with its result, time and address (grouped by request), and has **Ngắt máy này** (cut a computer off) and **Thu hồi khoá** (revoke its key).
 
 ### 6. Protect a child's computer (JoJo Guardian, optional)
 1. Install JojoAgent on the child's computer and sign it in (preferably with the child's own Hub account). Start it once: within a minute the computer appears on the Hub's **Máy tính của tôi** (My computers) page, tab **Bảo vệ trẻ em** (`https://hub.aitech.asia/devices?tab=guardian`).

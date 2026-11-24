@@ -14,7 +14,11 @@
 		</data>
 		<key>Resources/index.html</key>
 		<data>
-		TrCmXy6xfjjUjAcop1oW5bBx22s=
+		9suKHVC0fVP5S8AVKC0KohGmKOE=
+		</data>
+		<key>Resources/scitext.js</key>
+		<data>
+		bHZr3I/xPzhxO/MH3rRnPSTcPIA=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -64,7 +68,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zcNEoNKEHkPBEZ6n2YHcyZKkZEqT1dvFeFZkbywfcdo=
+			PEWUywupFG3dEk0uXodR89fwrn3uyUWPactLNqCU/Bs=
+			</data>
+		</dict>
+		<key>Resources/scitext.js</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			8/UclA2jYD9ehOqLe59dba+TPJ7C1FEVZXieB7mG6PQ=
 			</data>
 		</dict>
 	</dict>
